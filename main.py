@@ -52,9 +52,9 @@ def parse(commands):
                 fetch = "fetch(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
                 text[a:a+4] = ["".join(text[a:a+4])]
                 text[a] = "".join(jsonhelp("g", fetch.parseString(''.join(text[a:]).replace("\"", ""))[1], " "))
-
                 commands, text = p("".join(text))
                 b = len(text)
+
             else:
                 if type(Vars[commands[a].string]) == list:
                     if text[a+1] != "[":
@@ -80,7 +80,7 @@ def parse(commands):
         print(result[2])
 
     elif text[0].lower() == "record":
-        rec = "record" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + "," + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + ")"
+        rec = "record" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + "," + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
         result = rec.parseString(''.join(text).replace("\"", ""))
         jsonhelp("re", result[1], result[3])
 
@@ -144,14 +144,8 @@ def jsonhelp(action, data1, data2): #json feature
             return j[data1]
 
 def fstart(c):
-    #print(c)
-
-    text = []
-    #for x in c:
-    #    text.append(x.string)
-    #print(text)
     command = []
-    x = 0 #0 = Nothing, 1 = Ignore certain ":" placements.
+    x = 0
 
     for token in c:
         if token.string == "{" or token.string == "}":
@@ -211,7 +205,6 @@ def p(c):
 
     text = []
     for x in command:text.append(x.string)
-
     return command, text
 
 
