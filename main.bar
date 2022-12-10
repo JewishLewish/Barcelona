@@ -1,5 +1,1 @@
-x = ["Hello","Hello","Hello"]
-
-if (x[0] == x[1]) {
-    echo("works")
-}
+if ("Hello" == "Hello") {if("Hello" == "Hello") {echo("#1"):echo("#2")}:echo("#3")}

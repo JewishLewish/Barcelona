@@ -144,13 +144,28 @@ def jsonhelp(action, data1, data2): #json feature
             return j[data1]
 
 def fstart(c):
+    #print(c)
 
+    text = []
+    #for x in c:
+    #    text.append(x.string)
+    #print(text)
     command = []
+    x = 0 #0 = Nothing, 1 = Ignore certain ":" placements.
 
     for token in c:
+        if token.string == "{" or token.string == "}":
+            if x == 0:
+                x = 1
+            else:
+                x = 0
+
         if token.string == ":":
-            parse(command)
-            command.clear()
+            if x == 0:
+                parse(command)
+                command.clear()
+            else:
+                command.append(token)
         elif token.type == 0 or token.type == 62:
             continue
         elif token.type == 3:
