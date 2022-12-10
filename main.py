@@ -141,7 +141,10 @@ def jsonhelp(action, data1, data2): #json feature
     elif action == "g":
         with open("main.json", "r+") as outfile:
             j = json.loads(outfile.read())
-            return j[data1]
+            if type(j[data1]) == int:
+                return str(j[data1])
+            elif type(j[data1]) == str:
+                return ("\"" + j[data1] + "\"")
 
 def fstart(c):
     command = []
