@@ -48,33 +48,40 @@ def parse(commands):
                 continue
 
             if text[a] in "fetch":
-
-                fetch = "fetch(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
+                fetch = "fetch(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(digits) | White(' ',max=1))) + ")"
                 text[a:a+4] = ["".join(text[a:a+4])]
-                text[a] = "".join(jsonhelp("g", fetch.parseString(''.join(text[a:]).replace("\"", ""))[1], " "))
+                text[a] = "".join(jsonhelp("g", fetch.parseString(''.join(text[a:]).replace("\"", ""))[1], " "))[1:-1]
+                commands, text = p("".join(text))
+                b = len(text)
+
+            elif text[a] in "get":
+                get = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]"))) + "]" + ".get(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
+                x = get.parseString("".join(text[a-2:a+4]))
+                index = int(x[a])
+                y = "".join(x[1]).split(",")
+
+                if type(y[index]) == str:
+                    result = y[index].replace("\'", "\"")
+
+                text[a-2] = result
+                text.pop(a-1)
+                text.pop(a-1)
+                text.pop(a-1)
+                text.pop(a-1)
+                text.pop(a-1)
+
                 commands, text = p("".join(text))
                 b = len(text)
 
             else:
-                if type(Vars[commands[a].string]) == list:
-                    if text[a+1] != "[":
-                        text[a] = str(Vars[commands[a].string])
-                    elif text[a+1] == "[" and text[a+3] == "]":
-                        text[a] = str(Vars[commands[a].string][int(text[a+2])])
-                        text.pop(a+1)
-                        text.pop(a+1)
-                        text.pop(a+1)
-
-                        commands, text = p("".join(text))
-                        b = len(text)
-                else:
-                    text[a] = Vars[commands[a].string]
+                text[a] = str(Vars[commands[a].string])
 
         elif commands[a].string in "{}":
             break
 
 
     if text[0].lower() == "echo":
+        #print(text)
         echo = Word(alphas) + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
         result = echo.parseString(''.join(text).replace("\"", ""))
         print(result[2])
@@ -104,6 +111,11 @@ def parse(commands):
         result = f.parseString(''.join(text).replace("\"", ""))
         iwstates(commands, result)
 
+    elif text[0].lower() == "while":
+        f = "while" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=="))) + Word("=!" or "==") + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(")") | White(' ', max=1))) + ")"
+        result = f.parseString(''.join(text).replace("\"", ""))
+        iwstates(commands, result)
+
     elif text[0].lower() == "close":
         print("Close Statement -> System Exited!")
         sys.exit()
@@ -116,7 +128,8 @@ def parse(commands):
             if "[" in result[2]:
                 temp = result[0]
                 var = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]") | White(' ', max=1))) + "]"
-                Vars[temp] = str(var.parseString(result[2])[1:-1])[2:-3].replace(" ","").split(",")
+                print(str(var.parseString(result[2].replace("\"", ""))[1:-1])[2:-2].replace(" ","").split(","))
+                Vars[temp] = str(var.parseString(result[2].replace("\"", ""))[1:-1])[2:-2].replace(" ","").split(",")
 
             else:
                 Vars[result[0]] = result[2]
@@ -178,6 +191,18 @@ def iwstates(c, r): #c = commands, #r = results,
     if r[0] == "if(":
         if r[2] == "==":
             if r[1] == r[3]:
+                fstart(c[7:-1])
+            else:
+                return
+        elif r[2] == "=!":
+            if r[1] != r[3]:
+                fstart(c[8:-1])
+        else:
+            print("INAPPROPRIATE PROCEDURE!")
+
+    elif r[0] == "while(":
+        if r[2] == "==":
+            while r[1] == r[3]:
                 fstart(c[7:-1])
             else:
                 return

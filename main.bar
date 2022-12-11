@@ -1,1 +1,2 @@
-echo("test")
+x = math(2-2+2)
+echo("The answer is " x)
