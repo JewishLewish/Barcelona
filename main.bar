@@ -1,6 +1,6 @@
 x = eval[(2+2)/2]
-echo(eval[(2+2)/2])
 
-if (eval[(2+2)/2] == "2.0") {
-    echo("Works")
+if (eval[(2+2)/2] == 2.0) {
+    echo("This should work but for some reason it's not!"):
+    echo("test")
 }

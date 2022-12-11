@@ -82,6 +82,9 @@ def parse(commands):
                 text[a] = str(eval(x[1]))
                 for x in range(text.index("]") - text.index("[") + 1):
                     text.pop(a+1)
+                
+                commands, text = p("".join(text))
+                b = len(text)
 
             else:
                 text[a] = str(Vars[commands[a].string])
