@@ -48,30 +48,40 @@ def parse(commands):
                 continue
 
             if text[a] in "fetch":
-                fetch = "fetch(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(digits) | White(' ',max=1))) + ")"
+                fetch = "fetch(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
                 text[a:a+4] = ["".join(text[a:a+4])]
-                text[a] = "".join(jsonhelp("g", fetch.parseString(''.join(text[a:]).replace("\"", ""))[1], " "))[1:-1]
+                text[a] = "\"" + "".join(jsonhelp("g", fetch.parseString(''.join(text[a:]).replace("\"", ""))[1], " "))[1:-1] + "\""
                 commands, text = p("".join(text))
                 b = len(text)
+                print(text)
 
-            elif text[a] in "get":
-                get = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]"))) + "]" + ".get(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
-                x = get.parseString("".join(text[a-2:a+4]))
-                index = int(x[a])
-                y = "".join(x[1]).split(",")
+            #elif text[a] in "get":
+            #    print(text)
+            #    get = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]"))) + "]" + ".get(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
+            #    print(text[a-5:a+4])
+            #    x = get.parseString("".join(text[a-2:a+4]))
+            #    index = int(x[a])
+            #    y = "".join(x[1]).split(",")
 
-                if type(y[index]) == str:
-                    result = y[index].replace("\'", "\"")
+            #    if type(y[index]) == str:
+            #        result = y[index].replace("\'", "\"")
 
-                text[a-2] = result
-                text.pop(a-1)
-                text.pop(a-1)
-                text.pop(a-1)
-                text.pop(a-1)
-                text.pop(a-1)
+            #    text[a-2] = result
+            #    text.pop(a-1)
+            #    text.pop(a-1)
+            #    text.pop(a-1)
+            #    text.pop(a-1)
+            #    text.pop(a-1)
 
-                commands, text = p("".join(text))
-                b = len(text)
+            #    commands, text = p("".join(text))
+            #    b = len(text)
+
+            elif text[a] in "eval":
+                e = "eval" + "[" + Combine(OneOrMore(CharsNotIn("[]") | White(' ',max=1))) + "]"
+                x = e.parseString("".join(text[a:]))
+                text[a] = str(eval(x[1]))
+                for x in range(text.index("]") - text.index("[") + 1):
+                    text.pop(a+1)
 
             else:
                 text[a] = str(Vars[commands[a].string])
@@ -81,7 +91,6 @@ def parse(commands):
 
 
     if text[0].lower() == "echo":
-        #print(text)
         echo = Word(alphas) + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
         result = echo.parseString(''.join(text).replace("\"", ""))
         print(result[2])
@@ -234,7 +243,6 @@ def p(c):
     text = []
     for x in command:text.append(x.string)
     return command, text
-
 
 if __name__ == '__main__':
     main('main.bar')

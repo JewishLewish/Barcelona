@@ -1,2 +1,6 @@
-x = math(2-2+2)
-echo("The answer is " x)
+x = eval[(2+2)/2]
+echo(eval[(2+2)/2])
+
+if (eval[(2+2)/2] == "2.0") {
+    echo("Works")
+}
