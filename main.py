@@ -3,6 +3,8 @@ import tokenize
 from io import BytesIO
 import json
 from pyparsing import *
+import time
+start_time = time.time()
 Vars = {}
 FunA = {}
 digits = "012345689"
@@ -22,148 +24,147 @@ def main(file):
             command.clear()
         elif token.type == 0 or token.type == 62:
             continue
-        elif token.type == 3:
-            command.append(token)
-        elif token.type == 54:
-            command.append(token)
         else:
             command.append(token)
+    
+    print('\033[42m', "Process finished --- %s seconds ---" % (time.time() - start_time))
+    return
 
 def parse(commands):
-    text = []
-    for x in commands:
-        text.append(x.string)
-    text[0] = text[0].lower()
-    Keywords = ["fetch"]
+        text = []
+        for x in commands:
+            text.append(x.string)
+        text[0] = text[0].lower()
+        Keywords = ["fetch", "eval"]
+        Ignore = ["box", "open", "while"]
 
-    a = -1
-    b = len(commands)
+        if text[0] not in Ignore:
+            a = -1
+            b = len(commands)
+            while a < b - 1:
+                a = a + 1
 
-    while a < b - 1:
-        a = a + 1
-        if a == 0 or a == 1:
-                continue
-        
-        if commands[a].string in "{}":
-            break
-
-        if commands[a].type == 1:
-            if commands[a].string.lower() in Keywords:
-                continue
-            else:
-                text[a] = str(Vars[commands[a].string])
-                commands, text = p("".join(text))
-    
-
-    a = -1
-    b = len(commands)
-
-    while a < b - 1:
-        if text[0] == "box" or text[0] == "open":
-            break
-
-        a = a + 1
-        if commands[a].type == 1:
-            if a == 0 or a == 1:
-                continue
-
-            if text[a] in "fetch":
-                fetch = "fetch(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
-                text[a:a+4] = ["".join(text[a:a+4])]
-                text[a] = "\"" + "".join(jsonhelp("g", fetch.parseString(''.join(text[a:]).replace("\"", ""))[1], " "))[1:-1] + "\""
-                commands, text = p("".join(text))
-                b = len(text)
-                print(text)
-
-            #elif text[a] in "get":
-            #    print(text)
-            #    get = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]"))) + "]" + ".get(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
-            #    print(text[a-5:a+4])
-            #    x = get.parseString("".join(text[a-2:a+4]))
-            #    index = int(x[a])
-            #    y = "".join(x[1]).split(",")
-
-            #    if type(y[index]) == str:
-            #        result = y[index].replace("\'", "\"")
-
-            #    text[a-2] = result
-            #    text.pop(a-1)
-            #    text.pop(a-1)
-            #    text.pop(a-1)
-            #    text.pop(a-1)
-            #    text.pop(a-1)
-
-            #    commands, text = p("".join(text))
-            #    b = len(text)
-
-            elif text[a] in "eval":
-                print(text)
-                e = "eval" + "[" + Combine(OneOrMore(CharsNotIn("[]") | White(' ',max=1))) + "]"
-                x = e.parseString("".join(text[a:]))
-                text[a] = str(eval(x[1]))
-                for x in range(text.index("]") - text.index("[") + 1):
-                    text.pop(a+1)
+                if a == 0 or a == 1:
+                        continue
                 
-                commands, text = p("".join(text))
-                b = len(text)
+                if commands[a].string in "{}":
+                    break
 
-        elif commands[a].string in "{}":
-            break
-    
-    ast(commands)
+                if commands[a].type == 1:
+                    if commands[a].string.lower() in Keywords:
+                        continue
+                    else:
+                        text[a] = str(Vars[commands[a].string])
+                        commands, text = p("".join(text))
+
+            a = -1
+            b = len(commands)
+
+            while a < b - 1:
+                if text[0] == "box" or text[0] == "open":
+                    break
+
+                a = a + 1
+                if commands[a].type == 1:
+                    if a == 0 or a == 1:
+                        continue
+
+                    if text[a] in "fetch":
+                        fetch = "fetch(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
+                        text[a:a+4] = ["".join(text[a:a+4])]
+                        text[a] = "\"" + "".join(jsonhelp("g", fetch.parseString(''.join(text[a:]).replace("\"", ""))[1], " "))[1:-1] + "\""
+                        commands, text = p("".join(text))
+                        b = len(text)
+
+                    #elif text[a] in "get":
+                    #    print(text)
+                    #    get = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]"))) + "]" + ".get(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
+                    #    print(text[a-5:a+4])
+                    #    x = get.parseString("".join(text[a-2:a+4]))
+                    #    index = int(x[a])
+                    #    y = "".join(x[1]).split(",")
+
+                    #    if type(y[index]) == str:
+                    #        result = y[index].replace("\'", "\"")
+
+                    #    text[a-2] = result
+                    #    text.pop(a-1)
+                    #    text.pop(a-1)
+                    #    text.pop(a-1)
+                    #    text.pop(a-1)
+                    #    text.pop(a-1)
+
+                    #    commands, text = p("".join(text))
+                    #    b = len(text)
+
+                    elif text[a] in "eval":
+                        e = "eval" + "[" + Combine(OneOrMore(CharsNotIn("[]") | White(' ',max=1))) + "]"
+                        x = e.parseString("".join(text[a:]))
+                        text[a] = str(eval(x[1]))
+                        for x in range(text.index("]") - text.index("[") + 1):
+                            text.pop(a+1)
+                        
+                        commands, text = p("".join(text))
+                        b = len(text)
+
+                elif commands[a].string in "{}":
+                    break
+
+
+        ast(commands)
 
 def jsonhelp(action, data1, data2): #json feature
-    if action == "re":
-        with open("main.json", "r+") as outfile:
-            j = json.loads(outfile.read())
-            j[data1] = data2
+        if action == "re":
+            with open("main.json", "r+") as outfile:
+                j = json.loads(outfile.read())
+                j[data1] = data2
 
-        with open("main.json", "w") as outfile:
-            json.dump(j, outfile, indent=4)
+            with open("main.json", "w") as outfile:
+                json.dump(j, outfile, indent=4)
 
-    elif action == "d":
-        with open("main.json", "r+") as outfile:
-            j = json.loads(outfile.read())
-            del j[data1]
+        elif action == "d":
+            with open("main.json", "r+") as outfile:
+                j = json.loads(outfile.read())
+                del j[data1]
 
-        with open("main.json", "w") as outfile:
-            json.dump(j, outfile, indent=4)
+            with open("main.json", "w") as outfile:
+                json.dump(j, outfile, indent=4)
 
-    elif action == "g":
-        with open("main.json", "r+") as outfile:
-            j = json.loads(outfile.read())
-            if type(j[data1]) == int:
-                return str(j[data1])
-            elif type(j[data1]) == str:
-                return ("\"" + j[data1] + "\"")
+        elif action == "g":
+            with open("main.json", "r+") as outfile:
+                j = json.loads(outfile.read())
+                if type(j[data1]) == int:
+                    return str(j[data1])
+                elif type(j[data1]) == str:
+                    return ("\"" + j[data1] + "\"")
 
 def fstart(c):
-    command = []
-    x = 0
+        command = []
+        x = 0
 
-    for token in c:
-        if token.string == "{" or token.string == "}":
-            if x == 0:
-                x = 1
-            else:
-                x = 0
+        for token in c:
+            if token.string == "{" or token.string == "}":
+                if x == 0:
+                    x = 1
+                else:
+                    x = 0
 
-        if token.string == ":":
-            if x == 0:
-                parse(command)
-                command.clear()
+            if token.string == ":":
+                if x == 0:
+                    parse(command)
+                    command.clear()
+                else:
+                    command.append(token)
+            elif token.type == 0 or token.type == 62:
+                continue
+            elif token.type == 3:
+                command.append(token)
+            elif token.type == 54:
+                command.append(token)
             else:
                 command.append(token)
-        elif token.type == 0 or token.type == 62:
-            continue
-        elif token.type == 3:
-            command.append(token)
-        elif token.type == 54:
-            command.append(token)
-        else:
-            command.append(token)
 
-    parse(command)
+        parse(command)
 
 def iwstates(c, r): #c = commands, #r = results,
     if r[0] == "if(":
@@ -184,9 +185,14 @@ def iwstates(c, r): #c = commands, #r = results,
                 fstart(c[7:-1])
             else:
                 return
+
         elif r[2] == "=!":
-            if r[1] != r[3]:
+            y = r[1]
+            while r[1] != r[3]:
+                r[1] = Vars[y]
                 fstart(c[8:-1])
+            else:
+                return
         else:
             print("INAPPROPRIATE PROCEDURE!")
 
@@ -243,15 +249,17 @@ def ast(commands): #Abstract Syntax Tree
         f = "box" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=>") | White(' ', max=1)))
         result = f.parseString(''.join(text).replace("\"", ""))
         FunA[result[1]] = commands[5:-1]
-
+    
     elif text[0].lower() == "if":
         f = "if" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=="))) + Word("=!" or "==") + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(")") | White(' ', max=1))) + ")"
         result = f.parseString(''.join(text).replace("\"", ""))
         iwstates(commands, result)
 
     elif text[0].lower() == "while":
+        print(text)
         f = "while" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=="))) + Word("=!" or "==") + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(")") | White(' ', max=1))) + ")"
         result = f.parseString(''.join(text).replace("\"", ""))
+        print(Vars[result[1]])
         iwstates(commands, result)
 
     elif text[0].lower() == "close":
