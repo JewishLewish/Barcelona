@@ -13,8 +13,10 @@ def main(file):
     ac = []
 
     with open(file, 'rb') as f:
+        print(type(f.readline))
         for token in tokenize.tokenize(f.readline):
             ac.append(token)
+
     ac.pop(0)
 
     command = []

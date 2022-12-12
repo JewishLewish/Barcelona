@@ -1,7 +1,1 @@
-x = 0
-
-while (x =! 10000) {
-    x = eval[x + 1]
-}
-
-echo("DONE!")
+echo "Hello world"
