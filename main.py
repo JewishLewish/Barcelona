@@ -34,6 +34,26 @@ def parse(commands):
     for x in commands:
         text.append(x.string)
     text[0] = text[0].lower()
+    Keywords = ["fetch"]
+
+    a = -1
+    b = len(commands)
+
+    while a < b - 1:
+        a = a + 1
+        if a == 0 or a == 1:
+                continue
+        
+        if commands[a].string in "{}":
+            break
+
+        if commands[a].type == 1:
+            if commands[a].string.lower() in Keywords:
+                continue
+            else:
+                text[a] = str(Vars[commands[a].string])
+                commands, text = p("".join(text))
+    
 
     a = -1
     b = len(commands)
@@ -77,6 +97,7 @@ def parse(commands):
             #    b = len(text)
 
             elif text[a] in "eval":
+                print(text)
                 e = "eval" + "[" + Combine(OneOrMore(CharsNotIn("[]") | White(' ',max=1))) + "]"
                 x = e.parseString("".join(text[a:]))
                 text[a] = str(eval(x[1]))
@@ -86,65 +107,10 @@ def parse(commands):
                 commands, text = p("".join(text))
                 b = len(text)
 
-            else:
-                text[a] = str(Vars[commands[a].string])
-
         elif commands[a].string in "{}":
             break
-
-
-    if text[0].lower() == "echo":
-        echo = Word(alphas) + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
-        result = echo.parseString(''.join(text).replace("\"", ""))
-        print(result[2])
-
-    elif text[0].lower() == "record":
-        rec = "record" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + "," + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
-        result = rec.parseString(''.join(text).replace("\"", ""))
-        jsonhelp("re", result[1], result[3])
-
-    elif text[0].lower() == "delete":
-        dele = "delete" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + ")"
-        result = dele.parseString(''.join(text).replace("\"", ""))
-        jsonhelp("d", result[1], "")
-
-    elif text[0].lower() == "open":
-        s = "open" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + ")"
-        result = s.parseString(''.join(text).replace("\"", ""))
-        fstart(FunA[result[1]])
-
-    elif text[0].lower() == "box":
-        f = "box" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=>") | White(' ', max=1)))
-        result = f.parseString(''.join(text).replace("\"", ""))
-        FunA[result[1]] = commands[5:-1]
-
-    elif text[0].lower() == "if":
-        f = "if" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=="))) + Word("=!" or "==") + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(")") | White(' ', max=1))) + ")"
-        result = f.parseString(''.join(text).replace("\"", ""))
-        iwstates(commands, result)
-
-    elif text[0].lower() == "while":
-        f = "while" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=="))) + Word("=!" or "==") + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(")") | White(' ', max=1))) + ")"
-        result = f.parseString(''.join(text).replace("\"", ""))
-        iwstates(commands, result)
-
-    elif text[0].lower() == "close":
-        print("Close Statement -> System Exited!")
-        sys.exit()
-
-    elif commands[0].type == 1:
-        if commands[1].string == "=":
-            var = Word(alphas) + "=" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1)))
-            result = var.parseString(' '.join(text))
-
-            if "[" in result[2]:
-                temp = result[0]
-                var = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]") | White(' ', max=1))) + "]"
-                print(str(var.parseString(result[2].replace("\"", ""))[1:-1])[2:-2].replace(" ","").split(","))
-                Vars[temp] = str(var.parseString(result[2].replace("\"", ""))[1:-1])[2:-2].replace(" ","").split(",")
-
-            else:
-                Vars[result[0]] = result[2]
+    
+    ast(commands)
 
 def jsonhelp(action, data1, data2): #json feature
     if action == "re":
@@ -246,6 +212,65 @@ def p(c):
     text = []
     for x in command:text.append(x.string)
     return command, text
+
+def ast(commands): #Abstract Syntax Tree
+    text = []
+    for x in commands:
+        text.append(x.string)
+    text[0] = text[0].lower()
+
+    if text[0].lower() == "echo":
+        echo = Word(alphas) + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1))) + ")"
+        result = echo.parseString(''.join(text).replace("\"", ""))
+        print(result[2])
+
+    elif text[0].lower() == "record":
+        rec = "record" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + "," + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ', max=1))) + ")"
+        result = rec.parseString(''.join(text).replace("\"", ""))
+        jsonhelp("re", result[1], result[3])
+
+    elif text[0].lower() == "delete":
+        dele = "delete" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + ")"
+        result = dele.parseString(''.join(text).replace("\"", ""))
+        jsonhelp("d", result[1], "")
+
+    elif text[0].lower() == "open":
+        s = "open" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("(),") | White(' ', max=1))) + ")"
+        result = s.parseString(''.join(text).replace("\"", ""))
+        fstart(FunA[result[1]])
+
+    elif text[0].lower() == "box":
+        f = "box" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=>") | White(' ', max=1)))
+        result = f.parseString(''.join(text).replace("\"", ""))
+        FunA[result[1]] = commands[5:-1]
+
+    elif text[0].lower() == "if":
+        f = "if" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=="))) + Word("=!" or "==") + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(")") | White(' ', max=1))) + ")"
+        result = f.parseString(''.join(text).replace("\"", ""))
+        iwstates(commands, result)
+
+    elif text[0].lower() == "while":
+        f = "while" + "(" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("=="))) + Word("=!" or "==") + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn(")") | White(' ', max=1))) + ")"
+        result = f.parseString(''.join(text).replace("\"", ""))
+        iwstates(commands, result)
+
+    elif text[0].lower() == "close":
+        print("Close Statement -> System Exited!")
+        sys.exit()
+
+    elif commands[0].type == 1:
+        if commands[1].string == "=":
+            var = Word(alphas) + "=" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("()") | White(' ',max=1)))
+            result = var.parseString(' '.join(text))
+
+            if "[" in result[2]:
+                temp = result[0]
+                var = "[" + Combine(OneOrMore(CharsNotIn(printables) | CharsNotIn("[]") | White(' ', max=1))) + "]"
+                print(str(var.parseString(result[2].replace("\"", ""))[1:-1])[2:-2].replace(" ","").split(","))
+                Vars[temp] = str(var.parseString(result[2].replace("\"", ""))[1:-1])[2:-2].replace(" ","").split(",")
+
+            else:
+                Vars[result[0]] = result[2]
 
 if __name__ == '__main__':
     main('main.bar')
