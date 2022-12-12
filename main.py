@@ -157,10 +157,6 @@ def fstart(c):
                     command.append(token)
             elif token.type == 0 or token.type == 62:
                 continue
-            elif token.type == 3:
-                command.append(token)
-            elif token.type == 54:
-                command.append(token)
             else:
                 command.append(token)
 
@@ -208,10 +204,6 @@ def p(c):
             continue
         elif token.type == 0 or token.type == 62:
             continue
-        elif token.type == 3:
-            command.append(token)
-        elif token.type == 54:
-            command.append(token)
         else:
             command.append(token)
 
