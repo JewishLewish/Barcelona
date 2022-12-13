@@ -1,1 +1,3 @@
-echo "Hello world"
+echo "Anything here can continue";
+
+echo "test";
