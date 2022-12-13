@@ -16,6 +16,7 @@ tokens:
     Div       > '/'
     LCol      > '('
     RCol      > ')'
+    Col       > ':'
     Sep       > ';'
     Assign    > '='
     Comment   > '#' .. EOL      # anything from `#` to end of line
@@ -28,6 +29,18 @@ tokens:
 
 
 
+proc action(n: seq[TokenTuple]) = 
+    if n[0].value == "echo":
+        echo n[1].value
+    elif n[0].value == "var":
+        if n[1].kind == TK_IDENTIFIER:
+            if n[2].kind == TK_COL:
+                if n[3].kind == TK_IDENTIFIER:
+                    if n[4].kind ==  TK_ASSIGN:
+                        if n[3].value == "string":
+                            echo "Variable time!"
+                        else:
+                            echo "ERROR! THIS IS NOT AN APPROPRIATE VALUE"
 
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
@@ -38,23 +51,16 @@ proc main(n: string) =
     else:
         while true:
             var curr = lex.getToken()
-            if curr.kind == TK_EOF: break
-            add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
-
-    var syntax = newSeq[string]()
-    for x in ac:
-        echo x
-        if x.kind == TK_LCOL:
-            add(syntax, "(")
-        if x.kind == TK_RCOL:
-            add(syntax, ")")
-        else:
-            add(syntax, x.value)
-
-    
+            if curr.kind == TK_EOF: 
+                break
+            elif curr.kind == TK_SEP: 
+                action(ac)
+                ac = newSeq[TokenTuple]()
+            else:
+                echo (curr.kind)
+                add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
 
 
-    
 
 main("main.bar")
 let py = pyBuiltinsModule()

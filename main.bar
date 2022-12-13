@@ -1,3 +1,2 @@
-echo "Anything here can continue";
-
-echo "test";
+echo "Test";
+var x : string = "Test";
