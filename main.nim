@@ -1,10 +1,11 @@
+
 import tables
 import toktok
 import typetraits #This is for debugging
+
 import std/json
 import nimpy
 var Vars = initTable[string, string]() #Variables
-#var Vars: tuple[value: string, name: string, typ: string]
 let time = pyImport("time") #This is for time management
 let start_time = time.time()
 static:
@@ -17,7 +18,8 @@ tokens:
     Minus     > '-':
         LArrow  ? '>'
     Multi     > '*'
-    Div       > '/'
+    Div       > '/':
+        BlockComment ? '*' .. "*/"
     LCol      > '('
     RCol      > ')'
     LSCol     > '{'
@@ -30,12 +32,10 @@ tokens:
     EX        > '!':
         EQN      ? '='
     Comment   > '#' .. EOL      # anything from `#` to end of line
-    CommentAlt > "/*" ...... "*/"   # anything starting with `/*` to `*/`
-    Var       > "var"
-    Let       > "let"
-    Const     > "const"
+    CommentAlt > "/*" .. "*/"   # anything starting with `/*` to `*/`
     BTrue     > @["TRUE", "True", "true", "YES", "Yes", "yes", "y"]
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
+
 
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
@@ -65,6 +65,7 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                     n.del(x+1)
                     n.del(x+1)
                     y = len(n) - 1
+
 proc whi(n: var TokenTuple, n2: var TokenTuple): bool = 
 
     var x = ""
@@ -96,7 +97,7 @@ proc action(n: var seq[TokenTuple]) =
                     if n[4].kind ==  TK_ASSIGN:
                         if n[3].value == "string":
                             Vars[n[1].value] = n[5].value
-                        if n[3].value == "int":
+                        elif n[3].value == "int":
                             Vars[n[1].value] = n[5].value
                         else:
                             echo "ERROR! THIS IS NOT AN APPROPRIATE VALUE"
@@ -113,12 +114,14 @@ proc action(n: var seq[TokenTuple]) =
                     while x < y:
                         x = x + 1
                         if n[x].kind == TK_RSCOL:
+                            action(ex)
                             break
-                        elif n[x].kind == TK_SEP: 
+                        elif n[x].kind == TK_COL: 
                             action(ex)
                             ex = newSeq[TokenTuple]()
                         else:
                             add(ex, n[x]) 
+
             elif n[2].kind == TK_EQN:
                 if n[1].value != n[3].value:
                     var x = 4
@@ -128,6 +131,7 @@ proc action(n: var seq[TokenTuple]) =
                     while x < y:
                         x = x + 1
                         if n[x].kind == TK_RSCOL:
+                            action(ex)
                             break
                         elif n[x].kind == TK_SEP: 
                             action(ex)
@@ -153,6 +157,27 @@ proc action(n: var seq[TokenTuple]) =
                         else:
                             add(ex, n[x]) 
     
+    elif n[0].value == "loop":
+        if n[1].kind == TK_INTEGER:
+            var i = 1
+            while i != 5:
+                i = i + 1
+
+                var x = 2
+                var y = len(n) - 1
+                var ex = newSeq[TokenTuple]()
+
+                while x < y:
+                    x = x + 1
+                    if n[x].kind == TK_RSCOL:
+                       break
+                    elif n[x].kind == TK_SEP: 
+                        action(ex)
+                        ex = newSeq[TokenTuple]()
+                    else:
+                        add(ex, n[x]) 
+    
+
     elif n[0].value == "record":
         var jsonfile = parseJson(readFile("main.json"))
         jsonfile[n[1].value] = %* n[3].value
@@ -177,20 +202,26 @@ proc main(n: string) =
     if lex.hasError:
         echo lex.getError
     else:
+        var line = 1
         while true:
             var curr = lex.getToken()
+
             if curr.kind == TK_EOF: 
+                action(ac)
                 break
+
             elif curr.kind == TK_LSCOL or curr.kind == TK_RSCOL:
                 add(ac, curr)
                 if boxc == 0:
                     boxc = 1
                 else:
                     boxc = 0
-            elif curr.kind == TK_SEP: 
+            elif curr.line != line: 
                 if boxc == 0:
                     action(ac)
                     ac = newSeq[TokenTuple]()
+                    add(ac, curr)
+                    line = line + 1
                 else:
                     add(ac, curr)
             else:

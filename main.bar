@@ -1,3 +1,7 @@
-loop 5 {
-    echo fetch("test");
-};
+if "Test" == "Test" {
+
+    if "Test" == "Test" {
+        echo "Hello world"
+    }
+    
+}
