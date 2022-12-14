@@ -1,1 +1,3 @@
-echo "Test";
+record "test" -> "test";
+echo fetch("test");
+delete "test";

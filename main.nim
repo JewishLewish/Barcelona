@@ -1,6 +1,7 @@
 import tables
 import toktok
 import typetraits #This is for debugging
+import std/json
 import nimpy
 var Vars = initTable[string, string]() #Variables
 #var Vars: tuple[value: string, name: string, typ: string]
@@ -13,14 +14,14 @@ static:
     )
 tokens:
     Plus      > '+'
-    Minus     > '-'
+    Minus     > '-':
+        LArrow  ? '>'
     Multi     > '*'
     Div       > '/'
     LCol      > '('
     RCol      > ')'
     LSCol     > '{'
     RSCol     > '}'
-    Statement > '~' .. '+'
     Col       > ':'
     Sep       > ';'
     Period    > '.'
@@ -43,10 +44,9 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
     while x < y:
         x = x + 1
         if n[x].kind == TK_IDENTIFIER:
-            if n[x].value != "nath":
+            if n[x].value != "fetch":
                 n[x].value = Vars[n[x].value]
                 n[x].kind = TK_STRING
-
         if n[x].kind == TK_LSCOL:
             break
 
@@ -55,9 +55,16 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
     while x < y:
         x = x + 1
         if n[x].kind == TK_IDENTIFIER:
-            if n[x+1].value == "math":
-                echo "test"
-
+            if n[x].value == "fetch":
+                if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
+                    var jsonfile = parseJson(readFile("main.json"))
+                    
+                    n[x].value = jsonfile[n[x+2].value].getStr
+                    n[x].kind = TK_STRING
+                    n.del(x+1)
+                    n.del(x+1)
+                    n.del(x+1)
+                    y = len(n) - 1
 proc whi(n: var TokenTuple, n2: var TokenTuple): bool = 
 
     var x = ""
@@ -77,7 +84,6 @@ proc whi(n: var TokenTuple, n2: var TokenTuple): bool =
         return true
     else:
         return false
-
 proc action(n: var seq[TokenTuple]) = 
     if n[0].value == "echo":
         variable(n)
@@ -146,6 +152,22 @@ proc action(n: var seq[TokenTuple]) =
                             ex = newSeq[TokenTuple]()
                         else:
                             add(ex, n[x]) 
+    
+    elif n[0].value == "record":
+        var jsonfile = parseJson(readFile("main.json"))
+        jsonfile[n[1].value] = %* n[3].value
+
+        let f = open("main.json", fmWrite)
+        defer: f.close()
+        f.write(jsonfile)
+    
+    elif n[0].value == "delete":
+        var jsonfile = parseJson(readFile("main.json"))
+        delete(jsonfile, n[1].value)
+
+        let f = open("main.json", fmWrite)
+        defer: f.close()
+        f.write(jsonfile)
 
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
@@ -157,7 +179,6 @@ proc main(n: string) =
     else:
         while true:
             var curr = lex.getToken()
-            #echo curr.kind
             if curr.kind == TK_EOF: 
                 break
             elif curr.kind == TK_LSCOL or curr.kind == TK_RSCOL:
