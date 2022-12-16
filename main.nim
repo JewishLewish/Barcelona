@@ -35,6 +35,8 @@ tokens:
     CommentAlt > "/*" .. "*/"   # anything starting with `/*` to `*/`
     BTrue     > @["TRUE", "True", "true", "YES", "Yes", "yes", "y"]
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
+    Core      > '@'
+
 
 
 
@@ -88,56 +90,67 @@ proc whi(n: var TokenTuple, n2: var TokenTuple): bool =
 proc action(n: var seq[TokenTuple]) = 
     if n[0].value == "echo":
         variable(n)
-        echo n[1].value
 
     elif n[0].value == "var":
         if n[1].kind == TK_IDENTIFIER:
-            if n[2].kind == TK_COL:
-                if n[3].kind == TK_IDENTIFIER:
-                    if n[4].kind ==  TK_ASSIGN:
-                        if n[3].value == "string":
-                            Vars[n[1].value] = n[5].value
-                        elif n[3].value == "int":
-                            Vars[n[1].value] = n[5].value
-                        else:
-                            echo "ERROR! THIS IS NOT AN APPROPRIATE VALUE"
+            if n[2].kind == TK_ASSIGN:
+                var x = n[2 .. ^1]
+                variable(x)
+                n[2 .. ^1] = x
+                Vars[n[1].value] = n[3].value
+
 
     elif n[0].value == "if":
         variable(n)
         if n[4].kind == TK_LSCOL:
             if n[2].kind == TK_EQ:
                 if n[1].value == n[3].value:
+                    var execute = n[0 .. ^1] #This grabs the appropriate Data
                     var x = 4
-                    var y = len(n) - 1
-                    var ex = newSeq[TokenTuple]()
+                    var y = len(execute) - 1
+                    var ex = newSeq[TokenTuple]() #This collects the appropriate data
 
                     while x < y:
                         x = x + 1
-                        if n[x].kind == TK_RSCOL:
-                            action(ex)
-                            break
-                        elif n[x].kind == TK_COL: 
-                            action(ex)
-                            ex = newSeq[TokenTuple]()
+                        if execute[x].kind == TK_COL:
+                            if ex[0].value == "if":
+                                if execute[x-1].kind == TK_RSCOL:
+                                    echo "hi"
+                                else:
+                                    add(ex, n[x]) 
+                                    continue
+                            else: 
+                                action(ex)
+                                ex = newSeq[TokenTuple]()
                         else:
                             add(ex, n[x]) 
 
+                    action(ex)
+
+
             elif n[2].kind == TK_EQN:
                 if n[1].value != n[3].value:
+                    var execute = n[0 .. ^1] #This grabs the appropriate Data
                     var x = 4
-                    var y = len(n) - 1
-                    var ex = newSeq[TokenTuple]()
+                    var y = len(execute) - 1
+                    var ex = newSeq[TokenTuple]() #This collects the appropriate data
 
                     while x < y:
                         x = x + 1
-                        if n[x].kind == TK_RSCOL:
-                            action(ex)
-                            break
-                        elif n[x].kind == TK_SEP: 
-                            action(ex)
-                            ex = newSeq[TokenTuple]()
+                        if execute[x].kind == TK_COL:
+                            if ex[0].value == "if":
+                                if execute[x-1].kind == TK_RSCOL:
+                                    echo "This should never touch lol"
+                                else:
+                                    add(ex, n[x]) 
+                                    continue
+                            else: 
+                                action(ex)
+                                ex = newSeq[TokenTuple]()
                         else:
-                            add(ex, n[x])
+                            add(ex, n[x]) 
+
+                    action(ex)
         
     elif n[0].value == "while":
         if n[4].kind == TK_LSCOL:
@@ -197,33 +210,26 @@ proc action(n: var seq[TokenTuple]) =
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
     var lex = Lexer.init(fileContents = readFile(n))
-    var boxc = 0 #0 = Don't worry, #1 = Capture more
+    
+    var output: TaintedString
+    for x in lines(n):
+        add(output, x)
+    lex = Lexer.init(fileContents = output)
+
 
     if lex.hasError:
         echo lex.getError
     else:
-        var line = 1
         while true:
             var curr = lex.getToken()
 
             if curr.kind == TK_EOF: 
                 action(ac)
                 break
-
-            elif curr.kind == TK_LSCOL or curr.kind == TK_RSCOL:
-                add(ac, curr)
-                if boxc == 0:
-                    boxc = 1
-                else:
-                    boxc = 0
-            elif curr.line != line: 
-                if boxc == 0:
-                    action(ac)
-                    ac = newSeq[TokenTuple]()
-                    add(ac, curr)
-                    line = line + 1
-                else:
-                    add(ac, curr)
+                
+            elif curr.kind == TK_COL:
+                action(ac)
+                ac = newSeq[TokenTuple]()
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
 

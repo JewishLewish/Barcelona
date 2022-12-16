@@ -1,7 +1,2 @@
-if "Test" == "Test" {
-
-    if "Test" == "Test" {
-        echo "Hello world"
-    }
-    
-}
+var x = fetch("Test"):
+echo x
