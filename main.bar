@@ -1,2 +1,4 @@
-var x = fetch("Test"):
-echo x
+var x = fetch("test"):
+if "test" == "test" {
+    echo "Hello world"
+}

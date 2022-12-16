@@ -1,4 +1,3 @@
-
 import tables
 import toktok
 import typetraits #This is for debugging
@@ -8,11 +7,13 @@ import nimpy
 var Vars = initTable[string, string]() #Variables
 let time = pyImport("time") #This is for time management
 let start_time = time.time()
+
 static:
     Program.settings(
         uppercase = true,
         prefix = "Tk_"
     )
+
 tokens:
     Plus      > '+'
     Minus     > '-':
@@ -37,7 +38,12 @@ tokens:
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
     Core      > '@'
 
-
+type
+  Variable = object
+    name: string  # variable's itself value
+    vname: string # variable's holding value
+    ty: string # type of variable (String, Boolean, etc)
+var Vars2 = initTable[string, Variable]() #Variables
 
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
@@ -67,7 +73,6 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                     n.del(x+1)
                     n.del(x+1)
                     y = len(n) - 1
-
 proc whi(n: var TokenTuple, n2: var TokenTuple): bool = 
 
     var x = ""
@@ -90,6 +95,7 @@ proc whi(n: var TokenTuple, n2: var TokenTuple): bool =
 proc action(n: var seq[TokenTuple]) = 
     if n[0].value == "echo":
         variable(n)
+        echo n[1].value
 
     elif n[0].value == "var":
         if n[1].kind == TK_IDENTIFIER:
@@ -206,7 +212,6 @@ proc action(n: var seq[TokenTuple]) =
         let f = open("main.json", fmWrite)
         defer: f.close()
         f.write(jsonfile)
-
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
     var lex = Lexer.init(fileContents = readFile(n))
@@ -226,14 +231,13 @@ proc main(n: string) =
             if curr.kind == TK_EOF: 
                 action(ac)
                 break
-                
             elif curr.kind == TK_COL:
                 action(ac)
                 ac = newSeq[TokenTuple]()
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
 
-
+    echo n
 
 main("main.bar")
 let py = pyBuiltinsModule()
