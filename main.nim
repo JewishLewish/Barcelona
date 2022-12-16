@@ -4,7 +4,7 @@ import typetraits #This is for debugging
 
 import std/json
 import nimpy
-var Vars = initTable[string, string]() #Variables
+#var Vars = initTable[string, string]() #Variables
 let time = pyImport("time") #This is for time management
 let start_time = time.time()
 
@@ -42,7 +42,7 @@ type
   Variable = object
     name: string  # variable's itself value
     vname: string # variable's holding value
-    ty: string # type of variable (String, Boolean, etc)
+    ty: TokenKind # type of variable (String, Boolean, etc)
 var Vars2 = initTable[string, Variable]() #Variables
 
 
@@ -53,9 +53,9 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
         x = x + 1
         if n[x].kind == TK_IDENTIFIER:
             if n[x].value != "fetch":
-                n[x].value = Vars[n[x].value]
+                n[x].value = Vars2[n[x].value].vname
                 n[x].kind = TK_STRING
-        if n[x].kind == TK_LSCOL:
+        elif n[x].kind == TK_LSCOL:
             break
 
     x = 0 
@@ -69,22 +69,23 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                     
                     n[x].value = jsonfile[n[x+2].value].getStr
                     n[x].kind = TK_STRING
-                    n.del(x+1)
-                    n.del(x+1)
-                    n.del(x+1)
+                    n.delete(x+1)
+                    n.delete(x+1)
+                    n.delete(x+1)
                     y = len(n) - 1
+        
 proc whi(n: var TokenTuple, n2: var TokenTuple): bool = 
 
     var x = ""
     var x2 = ""
 
     if n.kind == TK_IDENTIFIER:
-        x = Vars[n.value]
+        x = Vars2[n.value].vname
     else:
         x = n.value
 
     if n2.kind == TK_IDENTIFIER:
-        x2 = Vars[n2.value]
+        x2 = Vars2[n.value].vname
     else:
         x2 = n2.value
 
@@ -103,11 +104,15 @@ proc action(n: var seq[TokenTuple]) =
                 var x = n[2 .. ^1]
                 variable(x)
                 n[2 .. ^1] = x
-                Vars[n[1].value] = n[3].value
+
+                Vars2[n[1].value] = Variable(name: n[1].value, vname: n[3].value, ty: TK_STRING)
+                if Vars2[n[1].value].ty == TK_STRING:
+                    echo "test"
 
 
     elif n[0].value == "if":
         variable(n)
+        
         if n[4].kind == TK_LSCOL:
             if n[2].kind == TK_EQ:
                 if n[1].value == n[3].value:
@@ -121,7 +126,7 @@ proc action(n: var seq[TokenTuple]) =
                         if execute[x].kind == TK_COL:
                             if ex[0].value == "if":
                                 if execute[x-1].kind == TK_RSCOL:
-                                    echo "hi"
+                                    echo "This is a funny easteregg."
                                 else:
                                     add(ex, n[x]) 
                                     continue
@@ -237,7 +242,6 @@ proc main(n: string) =
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
 
-    echo n
 
 main("main.bar")
 let py = pyBuiltinsModule()

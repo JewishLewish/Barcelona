@@ -1,4 +1,1 @@
-var x = fetch("test"):
-if "test" == "test" {
-    echo "Hello world"
-}
+if fetch("test") == "test" {echo "Hello world"}
