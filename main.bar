@@ -1,1 +1,5 @@
-if fetch("test") == "test" {echo "Hello world"}
+fun test (n string) {
+    echo n
+}:
+
+test("Hello World")

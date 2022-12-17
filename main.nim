@@ -1,10 +1,12 @@
+
+
 import tables
 import toktok
 import typetraits #This is for debugging
 
 import std/json
 import nimpy
-#var Vars = initTable[string, string]() #Variables
+
 let time = pyImport("time") #This is for time management
 let start_time = time.time()
 
@@ -23,27 +25,35 @@ tokens:
         BlockComment ? '*' .. "*/"
     LCol      > '('
     RCol      > ')'
+    Num      > "#"
     LSCol     > '{'
     RSCol     > '}'
     Col       > ':'
     Sep       > ';'
+    TRK       > "type"
+    FRK       > "fetch"
     Period    > '.'
     Assign    > '=':
         EQ      ? '='
     EX        > '!':
         EQN      ? '='
     Comment   > '#' .. EOL      # anything from `#` to end of line
-    CommentAlt > "/*" .. "*/"   # anything starting with `/*` to `*/`
     BTrue     > @["TRUE", "True", "true", "YES", "Yes", "yes", "y"]
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
     Core      > '@'
 
 type
-  Variable = object
+  Variable* = object
     name: string  # variable's itself value
     vname: string # variable's holding value
     ty: TokenKind # type of variable (String, Boolean, etc)
+
+type
+    Function* = object
+        exlist*: seq[TokenTuple]
+
 var Vars2 = initTable[string, Variable]() #Variables
+var FunEX = initTable[string, Function]() #Collects Functions
 
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
@@ -52,9 +62,9 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
     while x < y:
         x = x + 1
         if n[x].kind == TK_IDENTIFIER:
-            if n[x].value != "fetch":
-                n[x].value = Vars2[n[x].value].vname
-                n[x].kind = TK_STRING
+            n[x].value = Vars2[n[x].value].vname
+            n[x].kind = TK_STRING
+
         elif n[x].kind == TK_LSCOL:
             break
 
@@ -62,17 +72,34 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
     y = len(n) - 1
     while x < y:
         x = x + 1
-        if n[x].kind == TK_IDENTIFIER:
-            if n[x].value == "fetch":
-                if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
-                    var jsonfile = parseJson(readFile("main.json"))
-                    
-                    n[x].value = jsonfile[n[x+2].value].getStr
-                    n[x].kind = TK_STRING
+        if n[x].kind == TK_FRK:
+            if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
+                var jsonfile = parseJson(readFile("main.json"))
+                
+                n[x].value = jsonfile[n[x+2].value].getStr
+                n[x].kind = TK_STRING
+                n.delete(x+1)
+                n.delete(x+1)
+                n.delete(x+1)
+                y = len(n) - 1
+        
+        if n[x].kind == TK_TRK:
+            if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
+
+                echo typeof(n[x+2].kind)
+                
+                if Vars2.hasKey(n[x+2].value):
+                    var b = Vars2[n[x+2].value].ty
+                    n[x].value = b.astToStr
+                    n[x].kind = Vars2[n[x+2].value].ty
                     n.delete(x+1)
                     n.delete(x+1)
                     n.delete(x+1)
                     y = len(n) - 1
+                else:
+                    n[x].value = n[x+2].kind.astToStr
+                        
+
         
 proc whi(n: var TokenTuple, n2: var TokenTuple): bool = 
 
@@ -105,9 +132,7 @@ proc action(n: var seq[TokenTuple]) =
                 variable(x)
                 n[2 .. ^1] = x
 
-                Vars2[n[1].value] = Variable(name: n[1].value, vname: n[3].value, ty: TK_STRING)
-                if Vars2[n[1].value].ty == TK_STRING:
-                    echo "test"
+                Vars2[n[1].value] = Variable(name: n[1].value, vname: n[3].value, ty: n[3].kind)
 
 
     elif n[0].value == "if":
@@ -203,7 +228,7 @@ proc action(n: var seq[TokenTuple]) =
     
 
     elif n[0].value == "record":
-        var jsonfile = parseJson(readFile("main.json"))
+        let jsonfile = parseJson(readFile("main.json"))
         jsonfile[n[1].value] = %* n[3].value
 
         let f = open("main.json", fmWrite)
@@ -217,6 +242,20 @@ proc action(n: var seq[TokenTuple]) =
         let f = open("main.json", fmWrite)
         defer: f.close()
         f.write(jsonfile)
+    
+    elif n[0].value == "fun":
+        var i = -1
+        for x in n:
+            i = i + 1
+            if x.kind == TK_LSCOL:break
+        
+        i = i - 2 #Area between here takes in the center. -> fun name ->(var_name var_type)<- {
+        if n[1].kind == TK_IDENTIFIER:
+            FunEX[n[1].value] = Function(exlist: n[i+2 .. ^1])
+    
+    elif FunEX.hasKey(n[0].value):
+        echo "Function Execution"
+
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
     var lex = Lexer.init(fileContents = readFile(n))
