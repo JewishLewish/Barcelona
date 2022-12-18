@@ -5,8 +5,6 @@ import typetraits #This is for debugging
 import std/json
 import nimpy
 
-var j2 = parseJson("""{"nodes": []}""")
-
 static:
     Program.settings(
         uppercase = true,
@@ -25,10 +23,11 @@ tokens:
     Num      > "#"
     LSCol     > '{'
     RSCol     > '}'
-    Col       > ':'
     Sep       > ';'
     TRK       > "type"
     FRK       > "fetch"
+    FUN       > "fn"
+    IF        > "if"
     Period    > '.'
     Assign    > '=':
         EQ      ? '='
@@ -48,9 +47,10 @@ type
     Function* = object
         exlist*: seq[TokenTuple]
 
-
 var Vars2 = initTable[string, Variable]() #Variables
-var FunEX = initTable[string, Function]() #Collects Functions
+var FunEX = initTable[string, Function]() #Collects The Input of Functions in here
+
+var Fun = initTable[string, seq[TokenTuple]]()
 
 include tools/objtostring
 
@@ -96,9 +96,7 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                     y = len(n) - 1
                 else:
                     n[x].value = n[x+2].kind.astToStr
-                        
-
-        
+      
 proc whi(n: var TokenTuple, n2: var TokenTuple): bool = 
 
     var x = ""
@@ -146,8 +144,8 @@ proc action(n: var seq[TokenTuple]) =
 
                     while x < y:
                         x = x + 1
-                        if execute[x].kind == TK_COL:
-                            if ex[0].value == "if":
+                        if execute[x].kind == TK_SEP:
+                            if n[0].value == "if":
                                 if execute[x-1].kind == TK_RSCOL:
                                     echo "This is a funny easteregg."
                                 else:
@@ -171,7 +169,7 @@ proc action(n: var seq[TokenTuple]) =
 
                     while x < y:
                         x = x + 1
-                        if execute[x].kind == TK_COL:
+                        if execute[x].kind == TK_SEP:
                             if ex[0].value == "if":
                                 if execute[x-1].kind == TK_RSCOL:
                                     echo "This should never touch lol"
@@ -262,7 +260,7 @@ proc action(n: var seq[TokenTuple]) =
         while x < y:
             x = x + 1
             echo x
-            if execute[x].kind == TK_COL:
+            if execute[x].kind == TK_SEP:
                 action(ex)
                 ex = newSeq[TokenTuple]()
             else:
@@ -270,14 +268,45 @@ proc action(n: var seq[TokenTuple]) =
 
         action(ex)
 
+
+
+proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
+    var FunV = newSeq[TokenTuple]() #-> Collects
+    var FunN = "String" #-> Identifies
+    var i = -1
+    var l = len(n) - 1
+    var c = 0 #Looks at Right/Left Colons
+    while i < l:
+        i = i + 1
+        if n[i].kind == TK_FUN:
+            if n[i+1].kind == TK_IDENTIFIER:
+                if c == 0:
+                    FunN = n[i+1].value
+                else:
+                    echo "Error, you cannot put functions isnide of functions."
+        elif n[i].kind == TK_LSCOL:
+            c = c + 1
+            add(FunV, n[i])
+        elif n[i].kind == TK_RSCOL:
+            c = c - 1
+            add(FunV, n[i])
+            if c == 0:
+                Fun[FunN] = FunV
+                FunN = ""
+                FunV = newSeq[TokenTuple]()
+        else:
+            add(FunV, n[i])
+
+
+
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
-    var lex = Lexer.init(fileContents = readFile(n))
+    #var lex = Lexer.init(fileContents = readFile(n))
     
     var output: TaintedString
     for x in lines(n):
         add(output, x)
-    lex = Lexer.init(fileContents = output)
+    var lex = Lexer.init(fileContents = output)
 
 
     if lex.hasError:
@@ -285,15 +314,16 @@ proc main(n: string) =
     else:
         while true:
             var curr = lex.getToken()
-            if curr.kind == TK_EOF: 
-                action(ac)
+            if curr.kind == TK_FUN:
+                add(ac, curr)
+            elif curr.kind == TK_EOF: 
+                add(ac, curr)
                 break
-            elif curr.kind == TK_COL:
-                echo ac
-                action(ac)
-                ac = newSeq[TokenTuple]()
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
+    
+
+    parse(ac)
 
 
 main("main.bar")

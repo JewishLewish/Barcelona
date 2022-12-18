@@ -1,1 +1,8 @@
-echo "Hello world"
+fn main {
+    echo "Hello world"
+}
+
+
+fn test {
+    echo "Hello world2"
+}
