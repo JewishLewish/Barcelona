@@ -1,5 +1,1 @@
-fun test (n string) {
-    echo n
-}:
-
-test("Hello World")
+echo "Hello world"

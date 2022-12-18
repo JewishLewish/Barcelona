@@ -1,5 +1,10 @@
-include ../main.nim
+#include ../main.nim
+#import ../main.nim
 
-proc convert*(n: string): string =
-    echo n
-    return "test"
+
+#proc test(n: TokenKind) =
+#    echo "WORKS!"
+
+#if "test" == "test":
+#    echo "Hello world"
+    

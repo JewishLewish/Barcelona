@@ -1,5 +1,3 @@
-
-
 import tables
 import toktok
 import typetraits #This is for debugging
@@ -7,8 +5,7 @@ import typetraits #This is for debugging
 import std/json
 import nimpy
 
-let time = pyImport("time") #This is for time management
-let start_time = time.time()
+var j2 = parseJson("""{"nodes": []}""")
 
 static:
     Program.settings(
@@ -40,7 +37,6 @@ tokens:
     Comment   > '#' .. EOL      # anything from `#` to end of line
     BTrue     > @["TRUE", "True", "true", "YES", "Yes", "yes", "y"]
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
-    Core      > '@'
 
 type
   Variable* = object
@@ -52,9 +48,11 @@ type
     Function* = object
         exlist*: seq[TokenTuple]
 
+
 var Vars2 = initTable[string, Variable]() #Variables
 var FunEX = initTable[string, Function]() #Collects Functions
 
+include tools/objtostring
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x = 0 
@@ -252,9 +250,25 @@ proc action(n: var seq[TokenTuple]) =
         i = i - 2 #Area between here takes in the center. -> fun name ->(var_name var_type)<- {
         if n[1].kind == TK_IDENTIFIER:
             FunEX[n[1].value] = Function(exlist: n[i+2 .. ^1])
+            echo FunEX[n[1].value].exlist
     
     elif FunEX.hasKey(n[0].value):
-        echo "Function Execution"
+        var execute = FunEX[n[0].value].exlist #This grabs the appropriate Data
+        echo execute
+        var x = 0
+        var y = len(execute) - 1
+        var ex = newSeq[TokenTuple]() #This collects the appropriate data
+
+        while x < y:
+            x = x + 1
+            echo x
+            if execute[x].kind == TK_COL:
+                action(ex)
+                ex = newSeq[TokenTuple]()
+            else:
+                add(ex, n[x]) 
+
+        action(ex)
 
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
@@ -271,11 +285,11 @@ proc main(n: string) =
     else:
         while true:
             var curr = lex.getToken()
-
             if curr.kind == TK_EOF: 
                 action(ac)
                 break
             elif curr.kind == TK_COL:
+                echo ac
                 action(ac)
                 ac = newSeq[TokenTuple]()
             else:
@@ -283,6 +297,3 @@ proc main(n: string) =
 
 
 main("main.bar")
-let py = pyBuiltinsModule()
-discard py.print("The operation time took:")
-discard py.print(time.time().to(float) - start_time.to(float))
