@@ -1,20 +1,8 @@
 fn main {
-    echo "test";
+    test2();
+    echo x;
+}
 
-    if "test" == "test" {
-        echo "Hello world";
-        echo "test2";
-
-        if "test" == "test" {
-            echo "test3";
-        };
-
-        if "test" != "test" {
-            echo "THIS SHOULD NEVER APPEAR!";
-        };
-
-        echo "test4";
-    }
-
-    echo "test5";
+fn test2 {
+    var x = "test";
 }

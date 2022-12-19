@@ -48,11 +48,10 @@ type
         exlist*: seq[TokenTuple]
 
 var Vars2 = initTable[string, Variable]() #Variables
-var FunEX = initTable[string, Function]() #Collects The Input of Functions in here
 
 var Fun = initTable[string, seq[TokenTuple]]()
 
-include tools/objtostring
+import tools/tokparact
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x = 0 
@@ -116,7 +115,7 @@ proc whi(n: var TokenTuple, n2: var TokenTuple): bool =
         return true
     else:
         return false
-proc action(n: var seq[TokenTuple]) = 
+proc action*(n: var seq[TokenTuple]) = 
     if n[0].value == "echo":
         variable(n)
         echo n[1].value
@@ -241,34 +240,14 @@ proc action(n: var seq[TokenTuple]) =
         defer: f.close()
         f.write(jsonfile)
     
-    elif n[0].value == "fun":
-        var i = -1
-        for x in n:
-            i = i + 1
-            if x.kind == TK_LSCOL:break
-        
-        i = i - 2 #Area between here takes in the center. -> fun name ->(var_name var_type)<- {
-        if n[1].kind == TK_IDENTIFIER:
-            FunEX[n[1].value] = Function(exlist: n[i+2 .. ^1])
-            echo FunEX[n[1].value].exlist
-    
-    elif FunEX.hasKey(n[0].value):
-        var execute = FunEX[n[0].value].exlist #This grabs the appropriate Data
-        echo execute
-        var x = 0
-        var y = len(execute) - 1
-        var ex = newSeq[TokenTuple]() #This collects the appropriate data
+    elif n[0].kind == TK_IDENTIFIER:
+        var x = Fun[n[0].value][2 .. ^1]
+        var (b, i) = actiontree2(x)
+        var i2 = 0
+        while i2 != i:
+            action(b[i2])
+            i2 = i2 + 1
 
-        while x < y:
-            x = x + 1
-            echo x
-            if execute[x].kind == TK_SEP:
-                action(ex)
-                ex = newSeq[TokenTuple]()
-            else:
-                add(ex, n[x]) 
-
-        action(ex)
 
 proc actiontree(n: var seq[TokenTuple]) = #seperates EVERYTHING
     var collect = newSeq[TokenTuple]()
@@ -295,7 +274,6 @@ proc actiontree(n: var seq[TokenTuple]) = #seperates EVERYTHING
                 action(body[i])
                 collect = newSeq[TokenTuple]()
                 i = i + 1
-    
 
 proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
     var FunV = newSeq[TokenTuple]() #-> Collects
@@ -326,6 +304,8 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
     var x = Fun["main"][2 .. ^1]
     actiontree(x)
 
+
+
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
     #var lex = Lexer.init(fileContents = readFile(n))
@@ -351,6 +331,4 @@ proc main(n: string) =
     
 
     parse(ac)
-
-
 main("main.bar")
