@@ -1,8 +1,20 @@
 fn main {
-    echo "Hello world"
-}
+    echo "test";
 
+    if "test" == "test" {
+        echo "Hello world";
+        echo "test2";
 
-fn test {
-    echo "Hello world2"
+        if "test" == "test" {
+            echo "test3";
+        };
+
+        if "test" != "test" {
+            echo "THIS SHOULD NEVER APPEAR!";
+        };
+
+        echo "test4";
+    }
+
+    echo "test5";
 }

@@ -145,18 +145,20 @@ proc action(n: var seq[TokenTuple]) =
                     while x < y:
                         x = x + 1
                         if execute[x].kind == TK_SEP:
-                            if n[0].value == "if":
-                                if execute[x-1].kind == TK_RSCOL:
-                                    echo "This is a funny easteregg."
-                                else:
-                                    add(ex, n[x]) 
-                                    continue
-                            else: 
-                                action(ex)
-                                ex = newSeq[TokenTuple]()
+                            action(ex)
+                            ex = newSeq[TokenTuple]()
+                           # if n[0].value == "if":
+                           #    if execute[x-1].kind == TK_RSCOL:
+                            #        echo "This is a funny easteregg."
+                            #    else:
+                            #        add(ex, n[x]) 
+                            #        continue
+                            #else: 
+                            #    action(ex)
+                            #    ex = newSeq[TokenTuple]()
                         else:
                             add(ex, n[x]) 
-
+                    
                     action(ex)
 
 
@@ -268,15 +270,39 @@ proc action(n: var seq[TokenTuple]) =
 
         action(ex)
 
-
+proc actiontree(n: var seq[TokenTuple]) = #seperates EVERYTHING
+    var collect = newSeq[TokenTuple]()
+    var c = 0 #Looks at Right/Left Colons
+    var i = 0
+    var body = initTable[int, seq[TokenTuple]]()
+    for x in n:
+        add(collect,x)
+        if x.kind == TK_SEP:
+            if c == 0:
+                body[i] = collect
+                action(body[i])
+                collect = newSeq[TokenTuple]()
+                i = i + 1
+            else:
+                continue
+        
+        if x.kind == TK_LSCOL:
+            c = c + 1
+        elif x.kind == TK_RSCOL:
+            c = c - 1
+            if c == 0:
+                body[i] = collect
+                action(body[i])
+                collect = newSeq[TokenTuple]()
+                i = i + 1
+    
 
 proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
     var FunV = newSeq[TokenTuple]() #-> Collects
     var FunN = "String" #-> Identifies
     var i = -1
-    var l = len(n) - 1
     var c = 0 #Looks at Right/Left Colons
-    while i < l:
+    while i < len(n) - 1:
         i = i + 1
         if n[i].kind == TK_FUN:
             if n[i+1].kind == TK_IDENTIFIER:
@@ -297,13 +323,14 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
         else:
             add(FunV, n[i])
 
-
+    var x = Fun["main"][2 .. ^1]
+    actiontree(x)
 
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
     #var lex = Lexer.init(fileContents = readFile(n))
     
-    var output: TaintedString
+    var output = ""
     for x in lines(n):
         add(output, x)
     var lex = Lexer.init(fileContents = output)
