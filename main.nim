@@ -20,7 +20,7 @@ tokens:
         BlockComment ? '*' .. "*/"
     LCol      > '('
     RCol      > ')'
-    Num      > "#"
+    Math      > '$'
     LSCol     > '{'
     RSCol     > '}'
     Sep       > ';'
@@ -52,6 +52,7 @@ var Vars2 = initTable[string, Variable]() #Variables
 var Fun = initTable[string, seq[TokenTuple]]()
 
 import tools/tokparact
+import tools/mathematics
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x = 0 
@@ -95,6 +96,17 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                     y = len(n) - 1
                 else:
                     n[x].value = n[x+2].kind.astToStr
+        
+        if n[x].kind == TK_MATH:
+            var (b,i) = math(n)
+            n[x].kind = TK_INTEGER
+            n[x].value = $b
+            for range in (x .. i):
+                n.delete(x+1)
+            
+            y = len(n) - 1
+            echo n
+            
       
 proc whi(n: var TokenTuple, n2: var TokenTuple): bool = 
 
@@ -248,7 +260,6 @@ proc action*(n: var seq[TokenTuple]) =
             action(b[i2])
             i2 = i2 + 1
 
-
 proc actiontree(n: var seq[TokenTuple]) = #seperates EVERYTHING
     var collect = newSeq[TokenTuple]()
     var c = 0 #Looks at Right/Left Colons
@@ -303,8 +314,6 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
 
     var x = Fun["main"][2 .. ^1]
     actiontree(x)
-
-
 
 proc main(n: string) =
     var ac = newSeq[TokenTuple]()
