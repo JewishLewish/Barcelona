@@ -4,5 +4,5 @@ fn main {
         var x = $(x + 1);
     };
 
-    echo "test";
+    echo "real";
 }
