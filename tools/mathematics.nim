@@ -3,8 +3,7 @@ import ../main
 import mathexpr
 let e = newEvaluator()
 
-proc math*(n: var seq[TokenTuple]): (float, int) = 
-    #echo n 
+proc math*(n: var seq[TokenTuple]): (int, int) = 
     var expression = ""
     var i = 0
     var c = 0
@@ -32,4 +31,4 @@ proc math*(n: var seq[TokenTuple]): (float, int) =
             if c == 0:
                 track = 0
 
-    return (e.eval(expression), i)
+    return (e.eval(expression).int, i)

@@ -1,12 +1,8 @@
 fn main {
-    var x = $(2+2);
-    if x == "5.0" {
-        echo "test";
-
-        if x == "4.0" {
-            echo "test2";
-        };
+    var x = 1;
+    while x != 100000 {
+        var x = $(x + 1);
     };
 
-    echo x;
+    echo "test";
 }
