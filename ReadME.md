@@ -11,5 +11,13 @@ fn main {
     var x = "test";
     garbage(x);
 
+    test();
+
+}
+
+Comments are anything THAT ARE NOT INSIDE THE FUNCTIONS!
+
+fn test {
+    echo "Hello world";
 }
 ```
