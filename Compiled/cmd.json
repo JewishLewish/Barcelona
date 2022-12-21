@@ -1,0 +1,176 @@
+{
+  "cacheVersion": "D20210525T193831",
+  "outputFile": "C:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1\\cmd.exe",
+  "compile": [
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@sdigitsutils.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@sdigitsutils.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@sdigitsutils.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sassertions.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sassertions.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sassertions.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sformatfloat.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sformatfloat.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sformatfloat.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sdollars.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sdollars.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sdollars.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@swidestrs.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@swidestrs.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@swidestrs.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sio.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sio.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sio.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparseutils.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparseutils.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparseutils.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@smath.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@smath.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@smath.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sunicode.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sunicode.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sunicode.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrutils.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrutils.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrutils.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@shashes.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@shashes.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@shashes.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@scollections@stables.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@scollections@stables.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@scollections@stables.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstreams.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstreams.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstreams.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@slexbase.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@slexbase.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@slexbase.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@stoktok-0.1.0@stoktok.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@stoktok-0.1.0@stoktok.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@stoktok-0.1.0@stoktok.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparsejson.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparsejson.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparsejson.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sjson.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sjson.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sjson.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sdynlib.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sdynlib.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sdynlib.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@swindows@swinlean.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@swindows@swinlean.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@swindows@swinlean.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@stimes.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@stimes.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@stimes.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@swin_setenv.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@swin_setenv.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@swin_setenv.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sos.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sos.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sos.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy@spy_lib.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy@spy_lib.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy@spy_lib.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@stokparact.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@stokparact.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@stokparact.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrformat.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrformat.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrformat.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@smathexpr-1.3.2@smathexpr.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@smathexpr-1.3.2@smathexpr.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@smathexpr-1.3.2@smathexpr.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@smathematics.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@smathematics.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@smathematics.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mmain.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mmain.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mmain.nim.c"
+    ],
+    [
+      "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mcmd.nim.c",
+      "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe -c  -w -fmax-errors=3 -mno-ms-bitfields -DWIN32_LEAN_AND_MEAN -O3 -fno-strict-aliasing -fno-ident   -IC:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\lib -IC:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1 -o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mcmd.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mcmd.nim.c"
+    ]
+  ],
+  "link": [
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@sdigitsutils.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sassertions.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sformatfloat.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sdollars.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@swidestrs.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sio.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparseutils.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@smath.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sunicode.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrutils.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@shashes.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@scollections@stables.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstreams.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@slexbase.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@stoktok-0.1.0@stoktok.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparsejson.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sjson.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sdynlib.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@swindows@swinlean.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@stimes.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@swin_setenv.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sos.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy@spy_lib.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@stokparact.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrformat.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@smathexpr-1.3.2@smathexpr.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@smathematics.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mmain.nim.c.o",
+    "C:\\Users\\lanbr\\nimcache\\cmd_r\\@mcmd.nim.c.o"
+  ],
+  "linkcmd": "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\dist\\mingw32\\bin\\gcc.exe   -o C:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1\\cmd.exe C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@sdigitsutils.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sassertions.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sformatfloat.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sdollars.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@swidestrs.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem@sio.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@ssystem.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparseutils.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@smath.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sunicode.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrutils.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@shashes.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@scollections@stables.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstreams.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@slexbase.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@stoktok-0.1.0@stoktok.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sparsejson.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sjson.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sdynlib.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@swindows@swinlean.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@stimes.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@sstd@sprivate@swin_setenv.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sos.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy@spy_lib.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@snimpy-0.2.0@snimpy.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@stokparact.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@sNim-RE@snim-1.6.10@slib@spure@sstrformat.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@m..@s..@s..@s..@s.nimble@spkgs@smathexpr-1.3.2@smathexpr.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mtools@smathematics.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mmain.nim.c.o C:\\Users\\lanbr\\nimcache\\cmd_r\\@mcmd.nim.c.o    ",
+  "extraCmds": [],
+  "configFiles": [
+    "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\config\\nim.cfg",
+    "C:\\Users\\lanbr\\OneDrive\\Desktop\\Nim-RE\\nim-1.6.10\\config\\config.nims"
+  ],
+  "stdinInput": false,
+  "projectIsCmd": false,
+  "cmdInput": "",
+  "currentDir": "C:\\Users\\lanbr\\OneDrive\\Desktop\\BarcelonaVS\\Barcelona-1",
+  "cmdline": "",
+  "depfiles": [],
+  "nimexe": ""
+}
