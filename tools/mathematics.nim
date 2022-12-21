@@ -22,11 +22,12 @@ proc math*(n: var seq[TokenTuple]): (int, int) =
                 add(expression, ")")
 
 
-        if x.kind == TK_MATH:
+        elif x.kind == TK_MATH:
             track = 1
         elif x.kind == TK_LCOL:
             c = c + 1
-        elif x.kind == TK_RCOL:
+            
+        if x.kind == TK_RCOL:
             c = c - 1
             if c == 0:
                 track = 0

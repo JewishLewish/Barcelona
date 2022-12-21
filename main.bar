@@ -1,8 +1,3 @@
 fn main {
-    var x = 1;
-    while x != 100000 {
-        var x = $(x + 1);
-    };
-
-    echo "test";
+    echo "Hello world";
 }

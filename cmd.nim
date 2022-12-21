@@ -22,8 +22,9 @@ while true:
 
     if input[0] in ["b", "bar", "barcelona"]:
         if input[1] == "r" or input[1] == "run":
-            let file = input[2]
-            main(file)
+            echo " "
+            main(input[2])
+            echo " "
             break
     else:
         echo "Error."

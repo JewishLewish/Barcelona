@@ -5,6 +5,7 @@ import typetraits #This is for debugging
 import std/json
 import nimpy
 
+
 static:
     Program.settings(
         uppercase = true,
@@ -18,8 +19,6 @@ tokens:
     Greator   > '<':
         RArrow ? '-'
     Multi     > '*'
-    Div       > '/':
-        BlockComment ? '*' .. "*/"
     LCol      > '('
     RCol      > ')'
     Math      > '$'
@@ -31,6 +30,7 @@ tokens:
     FUN       > "fn"
     IF        > "if"
     GARBAGE   > "garbage"
+    IMPORT    > "import"
     Period    > '.'
     Assign    > '=':
         EQ      ? '='
@@ -48,10 +48,9 @@ type
 
 type
     Function* = object
-        exlist*: seq[TokenTuple]
+        exlist: seq[TokenTuple]
 
 var Vars2 = initTable[string, Variable]() #Variables
-
 var Fun = initTable[string, seq[TokenTuple]]()
 
 import tools/tokparact
@@ -196,6 +195,7 @@ proc action*(n: var seq[TokenTuple]) =
             if n[2].kind == TK_EQ or n[2].kind == TK_EQN:
                 while whi(n[1], n[2], n[3]):
                     var execute = n[0 .. ^1] #This grabs the appropriate Data
+                    echo execute
                     var x = 4
                     var y = len(execute) - 1
                     var ex = newSeq[TokenTuple]() #This collects the appropriate data
@@ -288,8 +288,9 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
     var FunV = newSeq[TokenTuple]() #-> Collects
     var FunN = "String" #-> Identifies
     var i = -1
+    var temp = len(n)
     var c = 0 #Looks at Right/Left Colons
-    while i < len(n) - 1:
+    while i < temp - 1:
         i = i + 1
         if n[i].kind == TK_FUN:
             if n[i+1].kind == TK_IDENTIFIER:
@@ -307,6 +308,7 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
                 Fun[FunN] = FunV
                 FunN = ""
                 FunV = newSeq[TokenTuple]()
+
         else:
             add(FunV, n[i])
 
@@ -328,9 +330,7 @@ proc main*(n: string) =
     else:
         while true:
             var curr = lex.getToken()
-            if curr.kind == TK_FUN:
-                add(ac, curr)
-            elif curr.kind == TK_EOF: 
+            if curr.kind == TK_EOF: 
                 add(ac, curr)
                 break
             else:
