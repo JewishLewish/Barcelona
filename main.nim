@@ -19,6 +19,8 @@ tokens:
     Greator   > '<':
         RArrow ? '-'
     Multi     > '*'
+    Div       > '/':
+        BlockComment ? '*' .. "*/"
     LCol      > '('
     RCol      > ')'
     Math      > '$'
@@ -31,7 +33,6 @@ tokens:
     IF        > "if"
     GARBAGE   > "garbage"
     IMPORT    > "import"
-    Period    > '.'
     Assign    > '=':
         EQ      ? '='
     EX        > '!':
@@ -195,7 +196,6 @@ proc action*(n: var seq[TokenTuple]) =
             if n[2].kind == TK_EQ or n[2].kind == TK_EQN:
                 while whi(n[1], n[2], n[3]):
                     var execute = n[0 .. ^1] #This grabs the appropriate Data
-                    echo execute
                     var x = 4
                     var y = len(execute) - 1
                     var ex = newSeq[TokenTuple]() #This collects the appropriate data
@@ -258,31 +258,31 @@ proc action*(n: var seq[TokenTuple]) =
             action(b[i2])
             i2 = i2 + 1
 
-proc actiontree(n: var seq[TokenTuple]) = #seperates EVERYTHING
-    var collect = newSeq[TokenTuple]()
-    var c = 0 #Looks at Right/Left Colons
-    var i = 0
-    var body = initTable[int, seq[TokenTuple]]()
-    for x in n:
-        add(collect,x)
-        if x.kind == TK_SEP:
-            if c == 0:
-                body[i] = collect
-                action(body[i])
-                collect = newSeq[TokenTuple]()
-                i = i + 1
-            else:
-                continue
-        
-        if x.kind == TK_LSCOL:
-            c = c + 1
-        elif x.kind == TK_RSCOL:
-            c = c - 1
-            if c == 0:
-                body[i] = collect
-                action(body[i])
-                collect = newSeq[TokenTuple]()
-                i = i + 1
+#proc actiontree(n: var seq[TokenTuple]) = #seperates EVERYTHING
+#    var collect = newSeq[TokenTuple]()
+#    var c = 0 #Looks at Right/Left Colons
+#    var i = 0
+#    var body = initTable[int, seq[TokenTuple]]()
+#    for x in n:
+#        add(collect,x)
+#        if x.kind == TK_SEP:
+#            if c == 0:
+#                body[i] = collect
+#                action(body[i])
+#                collect = newSeq[TokenTuple]()
+#                i = i + 1
+#            else:
+#                continue
+#        
+#        if x.kind == TK_LSCOL:
+#            c = c + 1
+#        elif x.kind == TK_RSCOL:
+#            c = c - 1
+#            if c == 0:
+#                body[i] = collect
+#                action(body[i])
+#                collect = newSeq[TokenTuple]()
+#                i = i + 1
 
 proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
     var FunV = newSeq[TokenTuple]() #-> Collects
@@ -308,12 +308,18 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
                 Fun[FunN] = FunV
                 FunN = ""
                 FunV = newSeq[TokenTuple]()
-
+        elif n[i].kind == TK_BLOCKCOMMENT:
+            continue
         else:
             add(FunV, n[i])
 
     var x = Fun["main"][2 .. ^1]
-    actiontree(x)
+    var (b, a) = actiontree2(x)
+    var i2 = 0
+    while i2 != a:
+        action(b[i2])
+        i2 = i2 + 1
+    #actiontree(x)
 
 proc main*(n: string) =
     var ac = newSeq[TokenTuple]()

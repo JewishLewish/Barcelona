@@ -1,21 +1,10 @@
 fn main {
-    echo "Hello world";
-    record "Test" -> "Hello world";
-    echo fetch("Test");
+    var x = 1;
 
-    if fetch("Test") == "Hello world" {
-        echo "test";
+    while x != 100000 {
+        var x = $(x+1);
     };
-
-    var x = "test";
     garbage(x);
 
-    test();
-
-}
-
-Comments are anything THAT ARE NOT INSIDE THE FUNCTIONS!
-
-fn test {
-    echo "Hello world";
+    echo "DONE!";
 }

@@ -2,3 +2,8 @@ test.exe
 main.exe
 main.json
 *.exe
+
+
+# Added by cargo
+
+/target
