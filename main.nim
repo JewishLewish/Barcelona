@@ -1,11 +1,5 @@
 import tables
 import toktok
-import typetraits #This is for debugging
-
-import std/json
-import nimpy
-
-
 static:
     Program.settings(
         uppercase = true,
@@ -27,7 +21,6 @@ tokens:
     LSCol     > '{'
     RSCol     > '}'
     Sep       > ';'
-    TRK       > "type"
     FRK       > "fetch"
     FUN       > "fn"
     IF        > "if"
@@ -57,6 +50,14 @@ var Fun = initTable[string, seq[TokenTuple]]()
 import tools/tokparact
 import tools/mathematics
 
+import std/[times, json, strutils]
+
+iterator countTo(n: int): int =
+  var i = 0
+  while i <= n:
+    yield i
+    inc i
+
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x = 0 
     var y = len(n) - 1
@@ -84,23 +85,7 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                 n.delete(x+1)
                 y = len(n) - 1
         
-        if n[x].kind == TK_TRK:
-            if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
-
-                echo typeof(n[x+2].kind)
-                
-                if Vars2.hasKey(n[x+2].value):
-                    var b = Vars2[n[x+2].value].ty
-                    n[x].value = b.astToStr
-                    n[x].kind = Vars2[n[x+2].value].ty
-                    n.delete(x+1)
-                    n.delete(x+1)
-                    n.delete(x+1)
-                    y = len(n) - 1
-                else:
-                    n[x].value = n[x+2].kind.astToStr
-        
-        if n[x].kind == TK_MATH:
+        elif n[x].kind == TK_MATH:
             var (b,i) = math(n)
             n[x].kind = TK_INTEGER
             n[x].value = $b
@@ -113,29 +98,20 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
 
-    var x = ""
-    var x2 = ""
+    var x = n.value
+    var x2 = n2.value
 
     if n.kind == TK_IDENTIFIER:
         x = Vars2[n.value].vname
-    else:
-        x = n.value
 
     if n2.kind == TK_IDENTIFIER:
-        x2 = Vars2[n.value].vname
-    else:
-        x2 = n2.value
+        x2 = Vars2[n2.value].vname
 
     if det.kind == TK_EQ:
-        if x == x2:
-            return true
-        else:
-            return false
+        return x == x2
+
     elif det.kind == TK_EQN:
-        if x != x2:
-            return true
-        else:
-            return false
+        return x != x2
 
 proc action*(n: var seq[TokenTuple]) = 
     if n[0].value == "echo":
@@ -212,23 +188,16 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].value == "loop":
         if n[1].kind == TK_INTEGER:
-            var i = 1
-            while i != 5:
-                i = i + 1
 
-                var x = 2
-                var y = len(n) - 1
-                var ex = newSeq[TokenTuple]()
-
-                while x < y:
-                    x = x + 1
-                    if n[x].kind == TK_RSCOL:
-                       break
-                    elif n[x].kind == TK_SEP: 
-                        action(ex)
-                        ex = newSeq[TokenTuple]()
-                    else:
-                        add(ex, n[x]) 
+            var ex = newSeq[TokenTuple]() #This collects the appropriate data
+            for x in n[3 .. ^1]:
+                if x.kind == TK_SEP:
+                    break
+                else:
+                    add(ex, x)
+        
+            for i in countTo(parseInt(n[1].value) - 1):
+                action(ex)
     
 
     elif n[0].value == "record":
@@ -258,31 +227,6 @@ proc action*(n: var seq[TokenTuple]) =
             action(b[i2])
             i2 = i2 + 1
 
-#proc actiontree(n: var seq[TokenTuple]) = #seperates EVERYTHING
-#    var collect = newSeq[TokenTuple]()
-#    var c = 0 #Looks at Right/Left Colons
-#    var i = 0
-#    var body = initTable[int, seq[TokenTuple]]()
-#    for x in n:
-#        add(collect,x)
-#        if x.kind == TK_SEP:
-#            if c == 0:
-#                body[i] = collect
-#                action(body[i])
-#                collect = newSeq[TokenTuple]()
-#                i = i + 1
-#            else:
-#                continue
-#        
-#        if x.kind == TK_LSCOL:
-#            c = c + 1
-#        elif x.kind == TK_RSCOL:
-#            c = c - 1
-#            if c == 0:
-#                body[i] = collect
-#                action(body[i])
-#                collect = newSeq[TokenTuple]()
-#                i = i + 1
 
 proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
     var FunV = newSeq[TokenTuple]() #-> Collects
@@ -322,20 +266,16 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
     #actiontree(x)
 
 proc main*(n: string) =
+    let time = cpuTime()
     var ac = newSeq[TokenTuple]()
-    #var lex = Lexer.init(fileContents = readFile(n))
-    
-    var output = ""
-    for x in lines(n):
-        add(output, x)
-    var lex = Lexer.init(fileContents = output)
-
+    var lex = Lexer.init(fileContents = readFile(n))
 
     if lex.hasError:
         echo lex.getError
     else:
         while true:
             var curr = lex.getToken()
+            
             if curr.kind == TK_EOF: 
                 add(ac, curr)
                 break
@@ -344,3 +284,4 @@ proc main*(n: string) =
     
 
     parse(ac)
+    echo cpuTime() - time

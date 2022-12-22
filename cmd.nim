@@ -12,11 +12,11 @@
 # r / run -> Opens a barcelona coded file (or ending in .bar)
 # t / translate <python/rust> -> Translates the barcelona file to a python or rust file 
 
-import strutils
+import std/[strutils]
 import main
 
 while true:
-    write(stdout, "This is the prompt -> ")
+    write(stdout, "-> ")
     let input = readLine(stdin).toLower.split(" ")
 
 
@@ -24,7 +24,6 @@ while true:
         if input[1] == "r" or input[1] == "run":
             echo " "
             main(input[2])
-            echo " "
             break
     else:
         echo "Error."

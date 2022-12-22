@@ -18,18 +18,19 @@ proc math*(n: var seq[TokenTuple]): (int, int) =
                 add(expression, "+")
             elif x.kind == TK_LCOL:
                 add(expression, "(")
+                c = c + 1
             elif x.kind == TK_RCOL:
                 add(expression, ")")
+                c = c - 1
+                if c == 0:
+                    track = 0
 
 
         elif x.kind == TK_MATH:
             track = 1
         elif x.kind == TK_LCOL:
-            c = c + 1
-            
-        if x.kind == TK_RCOL:
+            c = c + 1      
+        elif x.kind == TK_RCOL:
             c = c - 1
-            if c == 0:
-                track = 0
 
     return (e.eval(expression).int, i)
