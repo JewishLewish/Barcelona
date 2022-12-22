@@ -47,8 +47,8 @@ type
 var Vars2 = initTable[string, Variable]() #Variables
 var Fun = initTable[string, seq[TokenTuple]]()
 
-import tools/tokparact
-import tools/mathematics
+import tools/tokparact #Action Tree
+import tools/mathematics #Mathematics
 
 import std/[times, json, strutils]
 
@@ -59,8 +59,8 @@ iterator countTo(n: int): int =
     inc i
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
-    var x = 0 
-    var y = len(n) - 1
+    var x: int = 0 
+    var y: int = len(n) - 1
     while x < y:
         x = x + 1
         if n[x].kind == TK_IDENTIFIER:
@@ -86,13 +86,11 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                 y = len(n) - 1
         
         elif n[x].kind == TK_MATH:
-
             var (b,i) = math(n)
             n[x].kind = TK_INTEGER
             n[x].value = $b
             for range in (x .. i):
                 n.delete(x+1)
-            
             
             y = len(n) - 1
             
@@ -226,8 +224,7 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].kind == TK_IDENTIFIER:
         var x = Fun[n[0].value][2 .. ^1]
-        var b = actiontree2(x)
-        for ab in b:
+        for ab in actiontree2(x):
             var test = ab
             action(test) 
     
@@ -235,10 +232,11 @@ proc action*(n: var seq[TokenTuple]) =
 
 proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
     var FunV = newSeq[TokenTuple]() #-> Collects
-    var FunN = "String" #-> Identifies
-    var i = -1
-    var temp = len(n)
-    var c = 0 #Looks at Right/Left Colons
+    var FunN: string = "String" #-> Identifies
+    var i: int = -1
+    var temp: int = len(n)
+    var c: int = 0 #Looks at Right/Left Colons
+
     while i < temp - 1:
         i = i + 1
         if n[i].kind == TK_FUN:
@@ -261,8 +259,7 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
             add(FunV, n[i])
 
     var x = Fun["main"][2 .. ^1]
-    var b = actiontree2(x)
-    for ab in b:
+    for ab in actiontree2(x):
         var test = ab
         action(test)
 

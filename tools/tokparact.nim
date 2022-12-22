@@ -3,7 +3,7 @@ import ../main
 
 proc actiontree2*(n: var seq[TokenTuple]): (seq[seq[TokenTuple]]) = #seperates EVERYTHING
     var collect = newSeq[TokenTuple]()
-    var c = 0 #Looks at Right/Left Colons
+    var c: int = 0 #Looks at Right/Left Colons
     var ex2 = newSeq[seq[TokenTuple]]()
     for x in n:
         add(collect,x)

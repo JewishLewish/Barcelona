@@ -2,6 +2,5 @@ fn main {
     var x = 0;
     loop 1000000 {
         var x = $(x+1);
-    };
-    echo x;
+    }
 }
