@@ -1,19 +1,16 @@
 import ../main
-import tables
 
 
-proc actiontree2*(n: var seq[TokenTuple]): (Table[system.int, seq[TokenTuple]], int) = #seperates EVERYTHING
+proc actiontree2*(n: var seq[TokenTuple]): (seq[seq[TokenTuple]]) = #seperates EVERYTHING
     var collect = newSeq[TokenTuple]()
     var c = 0 #Looks at Right/Left Colons
-    var i = 0
-    var body = initTable[int, seq[TokenTuple]]()
+    var ex2 = newSeq[seq[TokenTuple]]()
     for x in n:
         add(collect,x)
         if x.kind == TK_SEP:
             if c == 0:
-                body[i] = collect
+                add(ex2, collect)
                 collect = newSeq[TokenTuple]()
-                i = i + 1
             else:
                 continue
         
@@ -22,8 +19,7 @@ proc actiontree2*(n: var seq[TokenTuple]): (Table[system.int, seq[TokenTuple]], 
         elif x.kind == TK_RSCOL:
             c = c - 1
             if c == 0:
-                body[i] = collect
+                add(ex2, collect)
                 collect = newSeq[TokenTuple]()
-                i = i + 1
 
-    return (body, i)
+    return (ex2)

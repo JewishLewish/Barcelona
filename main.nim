@@ -86,6 +86,7 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                 y = len(n) - 1
         
         elif n[x].kind == TK_MATH:
+
             var (b,i) = math(n)
             n[x].kind = TK_INTEGER
             n[x].value = $b
@@ -188,16 +189,21 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].value == "loop":
         if n[1].kind == TK_INTEGER:
-
+            
             var ex = newSeq[TokenTuple]() #This collects the appropriate data
+            var ex2 = newSeq[seq[TokenTuple]]()
             for x in n[3 .. ^1]:
                 if x.kind == TK_SEP:
-                    break
+                    add(ex2, ex)
+                    ex = newseq[TokenTuple]()
                 else:
                     add(ex, x)
+            #dealloc ex.unsafeAddr
         
             for i in countTo(parseInt(n[1].value) - 1):
-                action(ex)
+                for test in ex2:
+                    var test2 = test
+                    action(test2)
     
 
     elif n[0].value == "record":
@@ -221,11 +227,11 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].kind == TK_IDENTIFIER:
         var x = Fun[n[0].value][2 .. ^1]
-        var (b, i) = actiontree2(x)
-        var i2 = 0
-        while i2 != i:
-            action(b[i2])
-            i2 = i2 + 1
+        var b = actiontree2(x)
+        for ab in b:
+            var test = ab
+            action(test) 
+    
 
 
 proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
@@ -252,18 +258,14 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
                 Fun[FunN] = FunV
                 FunN = ""
                 FunV = newSeq[TokenTuple]()
-        elif n[i].kind == TK_BLOCKCOMMENT:
-            continue
         else:
             add(FunV, n[i])
 
     var x = Fun["main"][2 .. ^1]
-    var (b, a) = actiontree2(x)
-    var i2 = 0
-    while i2 != a:
-        action(b[i2])
-        i2 = i2 + 1
-    #actiontree(x)
+    var b = actiontree2(x)
+    for ab in b:
+        var test = ab
+        action(test)
 
 proc main*(n: string) =
     let time = cpuTime()
@@ -279,6 +281,8 @@ proc main*(n: string) =
             if curr.kind == TK_EOF: 
                 add(ac, curr)
                 break
+            elif curr.kind == TK_BLOCKCOMMENT:
+                continue
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
     

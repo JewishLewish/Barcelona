@@ -28,9 +28,5 @@ proc math*(n: var seq[TokenTuple]): (int, int) =
 
         elif x.kind == TK_MATH:
             track = 1
-        elif x.kind == TK_LCOL:
-            c = c + 1      
-        elif x.kind == TK_RCOL:
-            c = c - 1
-
+    
     return (e.eval(expression).int, i)

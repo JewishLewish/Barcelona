@@ -3,4 +3,5 @@ fn main {
     loop 1000000 {
         var x = $(x+1);
     };
+    echo x;
 }
