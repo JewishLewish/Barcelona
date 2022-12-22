@@ -1,6 +1,6 @@
 fn main {
-    var x = 0;
-    loop 1000000 {
-        var x = $(x+1);
+    var x = "test";
+    while x == "test" {
+        echo "Hello world";
     }
 }

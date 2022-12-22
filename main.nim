@@ -30,7 +30,6 @@ tokens:
         EQ      ? '='
     EX        > '!':
         EQN      ? '='
-    Comment   > '#' .. EOL      # anything from `#` to end of line
     BTrue     > @["TRUE", "True", "true", "YES", "Yes", "yes", "y"]
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
 
@@ -128,29 +127,10 @@ proc action*(n: var seq[TokenTuple]) =
 
 
     elif n[0].value == "if":
-        variable(n)
-        
+        #variable(n)
         if n[4].kind == TK_LSCOL:
-            if n[2].kind == TK_EQ:
-                if n[1].value == n[3].value:
-                    var execute = n[0 .. ^1] #This grabs the appropriate Data
-                    var x = 4
-                    var y = len(execute) - 1
-                    var ex = newSeq[TokenTuple]() #This collects the appropriate data
-
-                    while x < y:
-                        x = x + 1
-                        if execute[x].kind == TK_SEP:
-                            action(ex)
-                            ex = newSeq[TokenTuple]()
-                        else:
-                            add(ex, n[x]) 
-                    
-                    action(ex)
-
-
-            elif n[2].kind == TK_EQN:
-                if n[1].value != n[3].value:
+            if n[2].kind == TK_EQ or n[2].kind == TK_EQN:
+                if whi(n[1], n[2], n[3]):
                     var execute = n[0 .. ^1] #This grabs the appropriate Data
                     var x = 4
                     var y = len(execute) - 1
@@ -169,21 +149,20 @@ proc action*(n: var seq[TokenTuple]) =
     elif n[0].value == "while":
         if n[4].kind == TK_LSCOL:
             if n[2].kind == TK_EQ or n[2].kind == TK_EQN:
-                while whi(n[1], n[2], n[3]):
-                    var execute = n[0 .. ^1] #This grabs the appropriate Data
-                    var x = 4
-                    var y = len(execute) - 1
-                    var ex = newSeq[TokenTuple]() #This collects the appropriate data
 
-                    while x < y:
-                        x = x + 1
-                        if execute[x].kind == TK_SEP:
-                            action(ex)
-                            ex = newSeq[TokenTuple]()
-                        else:
-                            add(ex, n[x]) 
-                    
-                    action(ex)
+                var ex = newSeq[TokenTuple]() #This collects the appropriate data
+                var ex2 = newSeq[seq[TokenTuple]]()
+                for x in n[5 .. ^1]:
+                    if x.kind == TK_SEP:
+                        add(ex2, ex)
+                        ex = newseq[TokenTuple]()
+                    else:
+                        add(ex, x)
+
+                while whi(n[1], n[2], n[3]):
+                    for test in ex2:
+                        var e = test
+                        action(e)
     
     elif n[0].value == "loop":
         if n[1].kind == TK_INTEGER:
