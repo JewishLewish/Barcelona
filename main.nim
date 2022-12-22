@@ -198,7 +198,6 @@ proc action*(n: var seq[TokenTuple]) =
                     ex = newseq[TokenTuple]()
                 else:
                     add(ex, x)
-            #dealloc ex.unsafeAddr
         
             for i in countTo(parseInt(n[1].value) - 1):
                 for test in ex2:
@@ -288,4 +287,5 @@ proc main*(n: string) =
     
 
     parse(ac)
+    echo "\nExecution time:"
     echo cpuTime() - time
