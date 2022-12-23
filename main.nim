@@ -51,7 +51,7 @@ import tools/errors #Errors
 import modules/dict
 import modules/bm
 
-import std/[strutils]
+import std/strutils
 
 iterator countTo(n: int): int =
   var i = 0
@@ -128,7 +128,7 @@ proc action*(n: var seq[TokenTuple]) =
                 if whi(n[1], n[2], n[3]):
                     var execute = n[0 .. ^1] #This grabs the appropriate Data
                     var x = 4
-                    var y = len(execute) - 1
+                    let y = len(execute) - 1
                     var ex = newSeq[TokenTuple]() #This collects the appropriate data
 
                     while x < y:

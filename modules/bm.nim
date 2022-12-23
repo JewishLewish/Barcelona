@@ -1,4 +1,3 @@
-import ../main
 import std/times
 
 var time: float = 0
