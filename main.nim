@@ -21,7 +21,6 @@ tokens:
     LSCol     > '{'
     RSCol     > '}'
     Sep       > ';'
-    FRK       > "fetch"
     FUN       > "fn"
     IF        > "if"
     GARBAGE   > "garbage"
@@ -49,8 +48,10 @@ var Fun = initTable[string, seq[TokenTuple]]()
 import tools/tokparact #Action Tree
 import tools/mathematics #Mathematics
 import tools/errors #Errors
+import modules/dict
+import modules/bm
 
-import std/[times, json, strutils]
+import std/[strutils]
 
 iterator countTo(n: int): int =
   var i = 0
@@ -74,15 +75,9 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
     y = len(n) - 1
     while x < y:
         x = x + 1
-        if n[x].kind == TK_FRK:
+        if n[x].value == "fetch":
             if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
-                var jsonfile = parseJson(readFile("main.json"))
-                
-                n[x].value = jsonfile[n[x+2].value].getStr
-                n[x].kind = TK_STRING
-                n.delete(x+1)
-                n.delete(x+1)
-                n.delete(x+1)
+                fetch(n, x)
                 y = len(n) - 1
         
         elif n[x].kind == TK_MATH:
@@ -183,20 +178,13 @@ proc action*(n: var seq[TokenTuple]) =
     
 
     elif n[0].value == "record":
-        let jsonfile = parseJson(readFile("main.json"))
-        jsonfile[n[1].value] = %* n[3].value
-
-        let f = open("main.json", fmWrite)
-        defer: f.close()
-        f.write(jsonfile)
+        record(n)
     
     elif n[0].value == "delete":
-        var jsonfile = parseJson(readFile("main.json"))
-        delete(jsonfile, n[1].value)
-
-        let f = open("main.json", fmWrite)
-        defer: f.close()
-        f.write(jsonfile)
+        delete(n)
+    
+    elif n[0].value == "benchmark":
+        benchmark()
     
     elif n[0].kind == TK_GARBAGE:
         dealloc Vars2[n[2].value].unsafeAddr
@@ -234,6 +222,12 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
                 Fun[FunN] = FunV
                 FunN = ""
                 FunV = newSeq[TokenTuple]()
+        elif n[i].kind == TK_STRING and n[i+1].kind == TK_STRING:
+            n[i].value = n[i].value & n[i+1].value
+            n.delete(i+1)
+            temp = len(n)
+            add(FunV, n[i])
+
         else:
             add(FunV, n[i])
 
@@ -247,7 +241,6 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
         action(test)
 
 proc main*(n: string) =
-    let time = cpuTime()
     var ac = newSeq[TokenTuple]()
     var lex = Lexer.init(fileContents = readFile(n))
 
@@ -267,5 +260,3 @@ proc main*(n: string) =
     
 
     parse(ac)
-    echo "\nExecution time:"
-    echo cpuTime() - time
