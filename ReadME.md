@@ -15,7 +15,7 @@ fn main {
 
 }
 
-Comments are anything THAT ARE NOT INSIDE THE FUNCTIONS!
+/*Comments are anything THAT ARE NOT INSIDE THE FUNCTIONS!*/
 
 fn test {
     echo "Hello world";
