@@ -48,6 +48,7 @@ var Fun = initTable[string, seq[TokenTuple]]()
 
 import tools/tokparact #Action Tree
 import tools/mathematics #Mathematics
+import tools/errors #Errors
 
 import std/[times, json, strutils]
 
@@ -127,7 +128,6 @@ proc action*(n: var seq[TokenTuple]) =
 
 
     elif n[0].value == "if":
-        #variable(n)
         if n[4].kind == TK_LSCOL:
             if n[2].kind == TK_EQ or n[2].kind == TK_EQN:
                 if whi(n[1], n[2], n[3]):
@@ -211,7 +211,7 @@ proc action*(n: var seq[TokenTuple]) =
 
 proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
     var FunV = newSeq[TokenTuple]() #-> Collects
-    var FunN: string = "String" #-> Identifies
+    var FunN: string #-> Identifies
     var i: int = -1
     var temp: int = len(n)
     var c: int = 0 #Looks at Right/Left Colons
@@ -223,7 +223,7 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
                 if c == 0:
                     FunN = n[i+1].value
                 else:
-                    echo "Error, you cannot put functions isnide of functions."
+                    er(n[i], "You cannot define functions inside of functions.")
         elif n[i].kind == TK_LSCOL:
             c = c + 1
             add(FunV, n[i])
@@ -237,6 +237,10 @@ proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being
         else:
             add(FunV, n[i])
 
+    if c != 0:
+        echo c
+        er(n[i], "Failed to properly define a function.")
+    
     var x = Fun["main"][2 .. ^1]
     for ab in actiontree2(x):
         var test = ab

@@ -24,6 +24,7 @@ while true:
         if input[1] == "r" or input[1] == "run":
             echo " "
             main(input[2])
+            echo " "
             #break
     else:
         echo "Error."
