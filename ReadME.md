@@ -6,7 +6,7 @@ fn main {
 
     if fetch("Test") == "Hello world" {
         echo "test";
-    };
+    }
 
     var x = "test";
     garbage(x);
@@ -20,4 +20,9 @@ fn main {
 fn test {
     echo "Hello world";
 }
+
+
+main;
+
+echo "DONE!";
 ```

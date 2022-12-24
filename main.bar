@@ -1,9 +1,7 @@
 benchmark;
-
-var x = 0;
-loop 1000000 {
-    var x = $(x+1);
+fn test {
+    echo "hello world";
 }
-echo x;
 
+test;
 benchmark;

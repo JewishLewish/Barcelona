@@ -61,7 +61,7 @@ iterator countTo(n: int): int =
     yield i
     inc i
 
-proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
+proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x: int = 0
     var y = len(n) - 1
     while x < y:
@@ -73,7 +73,6 @@ proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables wit
                 y = len(n) - 1
         
         elif n[x].kind == TK_MATH:
-            #var temp = n[x-1 .. ^1]
             var (b,i) = math(n, Vars2)
             n[x].kind = TK_INTEGER
             n[x].value = $b
@@ -244,20 +243,10 @@ proc main*(n: string) =
                 continue
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
-    
-    #var parsed = parser2(ac)
 
-    #for input in parsed:
-    #    if input[0] != "":
-    #        var move = input[1]
-    #        action(move)
 
     var c: int = 0 #Looks at Right/Left Colons
-    #var ar: array[0 .. 10,(string, seq[TokenTuple])]
-    #var i = -1
     var collect = newSeq[TokenTuple]()
-    #var ast: (string, seq[TokenTuple])
-
     for x in ac:
         add(collect, x)
         if x.kind == TK_SEP:
