@@ -44,7 +44,7 @@ type
     Function* = object
         exlist: seq[TokenTuple]
 
-var Vars2* = initTable[string, Variable]() #Variables
+var Vars2 = initTable[string, Variable]() #Variables
 var Fun = initTable[string, seq[TokenTuple]]()
 
 import tools/[tokparact] #Action Tree
@@ -52,7 +52,6 @@ import tools/errors #Errors
 import modules/dict
 import modules/bm
 import modules/mathematics #Mathematics
-
 
 import std/strutils
 
@@ -63,7 +62,7 @@ iterator countTo(n: int): int =
     inc i
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
-    var x: int = 0 
+    var x: int = 0
     var y = len(n) - 1
     while x < y:
         x = x + 1
