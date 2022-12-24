@@ -36,18 +36,18 @@ tokens:
 
 type
   Variable* = object
-    name: string  # variable's itself value
-    vname: string # variable's holding value
-    ty: TokenKind # type of variable (String, Boolean, etc)
+    name*: string  # variable's itself value
+    vname*: string # variable's holding value
+    ty*: TokenKind # type of variable (String, Boolean, etc)
 
 type
     Function* = object
         exlist: seq[TokenTuple]
 
-var Vars2 = initTable[string, Variable]() #Variables
+var Vars2* = initTable[string, Variable]() #Variables
 var Fun = initTable[string, seq[TokenTuple]]()
 
-import tools/[tokparact, parser] #Action Tree
+import tools/[tokparact] #Action Tree
 import tools/errors #Errors
 import modules/dict
 import modules/bm
@@ -64,29 +64,27 @@ iterator countTo(n: int): int =
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x: int = 0 
-    while x < len(n) - 1:
-        x = x + 1
-        if n[x].kind == TK_IDENTIFIER:
-            n[x].kind = Vars2[n[x].value].ty
-            n[x].value = Vars2[n[x].value].vname
-
-    x = 0 
     var y = len(n) - 1
     while x < y:
         x = x + 1
+
         if n[x].value == "fetch":
             if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
                 fetch(n, x)
                 y = len(n) - 1
         
         elif n[x].kind == TK_MATH:
-            var (b,i) = math(n)
+            #var temp = n[x-1 .. ^1]
+            var (b,i) = math(n, Vars2)
             n[x].kind = TK_INTEGER
             n[x].value = $b
             for range in (x .. i):
                 n.delete(x+1)
-            
             y = len(n) - 1
+        
+        elif n[x].kind == TK_IDENTIFIER:
+            n[x].kind = Vars2[n[x].value].ty
+            n[x].value = Vars2[n[x].value].vname
             
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
@@ -119,7 +117,6 @@ proc action*(n: var seq[TokenTuple]) =
                 n[2 .. ^1] = x
 
                 Vars2[n[1].value] = Variable(name: n[1].value, vname: n[3].value, ty: n[3].kind)
-
 
     elif n[0].value == "if":
         if n[4].kind == TK_LSCOL:
@@ -229,7 +226,6 @@ proc action*(n: var seq[TokenTuple]) =
                 add(FunV, n[i])
 
         if c != 0:
-            echo c
             er(n[i], "Failed to properly define a function.")
 
 proc main*(n: string) =
