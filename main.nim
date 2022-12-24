@@ -23,6 +23,8 @@ tokens:
     Sep       > ';'
     FUN       > "fn"
     IF        > "if"
+    WHILE     > "while"
+    LOOP      > "loop"
     GARBAGE   > "garbage"
     IMPORT    > "import"
     Assign    > '=':
@@ -45,11 +47,12 @@ type
 var Vars2 = initTable[string, Variable]() #Variables
 var Fun = initTable[string, seq[TokenTuple]]()
 
-import tools/tokparact #Action Tree
-import tools/mathematics #Mathematics
+import tools/[tokparact, parser] #Action Tree
 import tools/errors #Errors
 import modules/dict
 import modules/bm
+import modules/mathematics #Mathematics
+
 
 import std/strutils
 
@@ -61,18 +64,14 @@ iterator countTo(n: int): int =
 
 proc variable(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x: int = 0 
-    var y: int = len(n) - 1
-    while x < y:
+    while x < len(n) - 1:
         x = x + 1
         if n[x].kind == TK_IDENTIFIER:
             n[x].kind = Vars2[n[x].value].ty
             n[x].value = Vars2[n[x].value].vname
 
-        elif n[x].kind == TK_LSCOL:
-            break
-
     x = 0 
-    y = len(n) - 1
+    var y = len(n) - 1
     while x < y:
         x = x + 1
         if n[x].value == "fetch":
@@ -159,7 +158,7 @@ proc action*(n: var seq[TokenTuple]) =
                         var e = test
                         action(e)
     
-    elif n[0].value == "loop":
+    elif n[0].kind == TK_LOOP:
         if n[1].kind == TK_INTEGER:
             
             var ex = newSeq[TokenTuple]() #This collects the appropriate data
@@ -195,50 +194,43 @@ proc action*(n: var seq[TokenTuple]) =
             var test = ab
             action(test) 
     
+    elif n[0].kind == TK_FUN:
+        var FunV = newSeq[TokenTuple]() #-> Collects
+        var FunN: string #-> Identifies
+        var i: int = -1
+        var temp: int = len(n)
+        var c: int = 0 #Looks at Right/Left Colons
 
-
-proc parse(n: var seq[TokenTuple]) = #Seperates each function. With "main" being the target one.
-    var FunV = newSeq[TokenTuple]() #-> Collects
-    var FunN: string #-> Identifies
-    var i: int = -1
-    var temp: int = len(n)
-    var c: int = 0 #Looks at Right/Left Colons
-
-    while i < temp - 1:
-        i = i + 1
-        if n[i].kind == TK_FUN:
-            if n[i+1].kind == TK_IDENTIFIER:
+        while i < temp - 1:
+            i = i + 1
+            if n[i].kind == TK_FUN:
+                if n[i+1].kind == TK_IDENTIFIER:
+                    if c == 0:
+                        FunN = n[i+1].value
+                    else:
+                        er(n[i], "You cannot define functions inside of functions.")
+            elif n[i].kind == TK_LSCOL:
+                c = c + 1
+                add(FunV, n[i])
+            elif n[i].kind == TK_RSCOL:
+                c = c - 1
+                add(FunV, n[i])
                 if c == 0:
-                    FunN = n[i+1].value
-                else:
-                    er(n[i], "You cannot define functions inside of functions.")
-        elif n[i].kind == TK_LSCOL:
-            c = c + 1
-            add(FunV, n[i])
-        elif n[i].kind == TK_RSCOL:
-            c = c - 1
-            add(FunV, n[i])
-            if c == 0:
-                Fun[FunN] = FunV
-                FunN = ""
-                FunV = newSeq[TokenTuple]()
-        elif n[i].kind == TK_STRING and n[i+1].kind == TK_STRING:
-            n[i].value = n[i].value & n[i+1].value
-            n.delete(i+1)
-            temp = len(n)
-            add(FunV, n[i])
+                    Fun[FunN] = FunV
+                    FunN = ""
+                    FunV = newSeq[TokenTuple]()
+            elif n[i].kind == TK_STRING and n[i+1].kind == TK_STRING:
+                n[i].value = n[i].value & n[i+1].value
+                n.delete(i+1)
+                temp = len(n)
+                add(FunV, n[i])
 
-        else:
-            add(FunV, n[i])
+            else:
+                add(FunV, n[i])
 
-    if c != 0:
-        echo c
-        er(n[i], "Failed to properly define a function.")
-    
-    var x = Fun["main"][2 .. ^1]
-    for ab in actiontree2(x):
-        var test = ab
-        action(test)
+        if c != 0:
+            echo c
+            er(n[i], "Failed to properly define a function.")
 
 proc main*(n: string) =
     var ac = newSeq[TokenTuple]()
@@ -248,7 +240,7 @@ proc main*(n: string) =
         echo lex.getError
     else:
         while true:
-            var curr = lex.getToken()
+            let curr = lex.getToken()
             
             if curr.kind == TK_EOF: 
                 add(ac, curr)
@@ -258,5 +250,30 @@ proc main*(n: string) =
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
     
+    #var parsed = parser2(ac)
 
-    parse(ac)
+    #for input in parsed:
+    #    if input[0] != "":
+    #        var move = input[1]
+    #        action(move)
+
+    var c: int = 0 #Looks at Right/Left Colons
+    #var ar: array[0 .. 10,(string, seq[TokenTuple])]
+    #var i = -1
+    var collect = newSeq[TokenTuple]()
+    #var ast: (string, seq[TokenTuple])
+
+    for x in ac:
+        add(collect, x)
+        if x.kind == TK_SEP:
+            if c == 0:
+                action(collect)
+                collect = newSeq[TokenTuple]()
+        elif x.kind == TK_LSCOL:
+            c = c + 1
+        elif x.kind == TK_RSCOL:
+            c = c - 1
+            if c == 0:
+                action(collect)
+                collect = newSeq[TokenTuple]()
+    #parse(ac)

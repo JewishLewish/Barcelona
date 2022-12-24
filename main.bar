@@ -1,10 +1,9 @@
-fn main {
-    benchmark;
+benchmark;
 
-    var x = 0;
-    loop 1000000 {
-        var x = $(x+1);
-    }
+var x = 0;
 
-    benchmark;
+loop 1000000 {
+    var x = $(x + 1);
 }
+
+benchmark;
