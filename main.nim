@@ -40,11 +40,7 @@ type
     vname*: string # variable's holding value
     ty*: TokenKind # type of variable (String, Boolean, etc)
 
-type
-    Function* = object
-        exlist: seq[TokenTuple]
-
-var Vars2 = initTable[string, Variable]() #Variables
+var Vars2 = initTable[string, Variable]()
 var Fun = initTable[string, seq[TokenTuple]]()
 
 import tools/[tokparact] #Action Tree
@@ -53,7 +49,7 @@ import modules/dict
 import modules/bm
 import modules/mathematics #Mathematics
 
-import std/strutils
+from strutils import parseInt
 
 iterator countTo(n: int): int =
   var i = 0
@@ -63,14 +59,12 @@ iterator countTo(n: int): int =
 
 proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
     var x: int = 0
-    var y = len(n) - 1
-    while x < y:
+    while x < len(n) - 1:
         x = x + 1
 
         if n[x].value == "fetch":
             if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
                 fetch(n, x)
-                y = len(n) - 1
         
         elif n[x].kind == TK_MATH:
             var (b,i) = math(n, Vars2)
@@ -78,7 +72,6 @@ proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables wi
             n[x].value = $b
             for range in (x .. i):
                 n.delete(x+1)
-            y = len(n) - 1
         
         elif n[x].kind == TK_IDENTIFIER:
             n[x].kind = Vars2[n[x].value].ty
@@ -164,6 +157,8 @@ proc action*(n: var seq[TokenTuple]) =
                     ex = newseq[TokenTuple]()
                 else:
                     add(ex, x)
+
+            dealloc ex.addr
         
             for i in countTo(parseInt(n[1].value) - 1):
                 for test in ex2:
@@ -227,6 +222,7 @@ proc action*(n: var seq[TokenTuple]) =
             er(n[i], "Failed to properly define a function.")
 
 proc main*(n: string) =
+
     var ac = newSeq[TokenTuple]()
     var lex = Lexer.init(fileContents = readFile(n))
 
@@ -243,7 +239,8 @@ proc main*(n: string) =
                 continue
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
-
+    
+    dealloc lex.addr
 
     var c: int = 0 #Looks at Right/Left Colons
     var collect = newSeq[TokenTuple]()
@@ -260,4 +257,3 @@ proc main*(n: string) =
             if c == 0:
                 action(collect)
                 collect = newSeq[TokenTuple]()
-    #parse(ac)
