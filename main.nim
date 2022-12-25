@@ -81,9 +81,9 @@ proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables wi
         elif n[x].kind == TK_IDENTIFIER:
             n[x].kind = Vars2[n[x].value].ty
             n[x].value = Vars2[n[x].value].vname
+
             if n[x].kind == TK_DICT:
-                if n[x+1].kind == TK_LBRA:
-                        rd(n, x)
+                rd(n, x)
 
             
       

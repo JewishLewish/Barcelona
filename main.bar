@@ -1,5 +1,2 @@
-benchmark;
-request("https://pxls.space/users") -> x;
-echo x["type"];
-
-benchmark;
+request("https://pxls.space/stats/stats.json") -> x;
+echo x["board_info"]["width"];

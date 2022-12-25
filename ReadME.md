@@ -22,7 +22,7 @@ fn test {
 }
 
 
-main;
+main();
 
 echo "DONE!";
 ```
