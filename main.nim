@@ -17,10 +17,13 @@ tokens:
         BlockComment ? '*' .. "*/"
     LCol      > '('
     RCol      > ')'
+    LBRA      > '['
+    RBRA      > ']'
     Math      > '$'
     LSCol     > '{'
     RSCol     > '}'
     Sep       > ';'
+    IMPORT    > "import"
     FUN       > "fn"
     IF        > "if"
     WHILE     > "while"
@@ -33,6 +36,7 @@ tokens:
         EQN      ? '='
     BTrue     > @["TRUE", "True", "true", "YES", "Yes", "yes", "y"]
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
+    Dict      > "mother nature does it all for us."
 
 type
   Variable* = object
@@ -47,6 +51,7 @@ import tools/[tokparact] #Action Tree
 import tools/errors #Errors
 import modules/dict
 import modules/bm
+import modules/requests
 import modules/mathematics #Mathematics
 
 from strutils import parseInt
@@ -76,6 +81,10 @@ proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables wi
         elif n[x].kind == TK_IDENTIFIER:
             n[x].kind = Vars2[n[x].value].ty
             n[x].value = Vars2[n[x].value].vname
+            if n[x].kind == TK_DICT:
+                if n[x+1].kind == TK_LBRA:
+                        rd(n, x)
+
             
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
@@ -157,8 +166,6 @@ proc action*(n: var seq[TokenTuple]) =
                     ex = newseq[TokenTuple]()
                 else:
                     add(ex, x)
-
-            dealloc ex.addr
         
             for i in countTo(parseInt(n[1].value) - 1):
                 for test in ex2:
@@ -174,6 +181,10 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].value == "benchmark":
         benchmark()
+    
+    elif n[0].value == "request":
+        request(n)
+        Vars2[n[2].value] = Variable(name: n[2].value, vname: n[0].value, ty: TK_DICT)
     
     elif n[0].kind == TK_GARBAGE:
         dealloc Vars2[n[2].value].unsafeAddr
@@ -239,21 +250,18 @@ proc main*(n: string) =
                 continue
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
-    
-    dealloc lex.addr
+
 
     var c: int = 0 #Looks at Right/Left Colons
     var collect = newSeq[TokenTuple]()
     for x in ac:
         add(collect, x)
-        if x.kind == TK_SEP:
+        if x.kind == TK_SEP or x.kind == TK_RSCOL:
+            if x.kind == TK_RSCOL:
+                c = c - 1
+            
             if c == 0:
                 action(collect)
                 collect = newSeq[TokenTuple]()
         elif x.kind == TK_LSCOL:
             c = c + 1
-        elif x.kind == TK_RSCOL:
-            c = c - 1
-            if c == 0:
-                action(collect)
-                collect = newSeq[TokenTuple]()

@@ -1,4 +1,4 @@
-import std/times
+from std/times import cpuTime
 
 var time: float = 0
 var track = 0

@@ -1,7 +1,5 @@
 benchmark;
-fn test {
-    echo "hello world";
-}
+request("https://pxls.space/users") -> x;
+echo x["type"];
 
-test;
 benchmark;
