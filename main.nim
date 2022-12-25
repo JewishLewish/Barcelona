@@ -44,8 +44,9 @@ type
     vname*: string # variable's holding value
     ty*: TokenKind # type of variable (String, Boolean, etc)
 
-var Vars2 = initTable[string, Variable]()
+var Vars2* = initTable[string, Variable]()
 var Fun = initTable[string, seq[TokenTuple]]()
+import developertools/vardefine #This is for Variables and defining them
 
 import tools/[tokparact] #Action Tree
 import tools/errors #Errors
@@ -82,7 +83,7 @@ proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables wi
             n[x].kind = Vars2[n[x].value].ty
             n[x].value = Vars2[n[x].value].vname
 
-            if n[x].kind == TK_DICT:
+            if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
                 rd(n, x)
 
             

@@ -1,2 +1,3 @@
-request("https://pxls.space/stats/stats.json") -> x;
-echo x["board_info"]["width"];
+var auth = "Bearer insert auth token";
+request("website that asks for auth token" auth) -> x;
+echo x;
