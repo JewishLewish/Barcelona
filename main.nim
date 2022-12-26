@@ -49,12 +49,13 @@ type
 
 var Vars2* = initTable[string, Variable]()
 var Fun = initTable[string, seq[TokenTuple]]()
-var Dump = initTable[string, seq[string]]() #Grabs certain variables that would exist temporarily and prepares to dump them.
+var Dump = initTable[string, seq[string]]() #Grabs certain variables from functionsthat would exist temporarily and prepares to dump them.
 var ReCache: TokenTuple
 
 
 import tools/[tokparact] #Action Tree
 import tools/errors #Errors
+import tools/lcollect
 import modules/dict
 import modules/bm
 import modules/requests
@@ -130,57 +131,24 @@ proc action*(n: var seq[TokenTuple]) =
 
                 Vars2[n[1].value] = Variable(vname: n[3].value, ty: n[3].kind)
 
-    elif n[0].value == "if":
+    elif n[0].value == "if" or n[0].value == "while":
         if n[4].kind == TK_LSCOL:
             if n[2].kind == TK_EQ or n[2].kind == TK_EQN:
-                if whi(n[1], n[2], n[3]):
-                    var execute = n[0 .. ^1] #This grabs the appropriate Data
-                    var x = 4
-                    let y = len(execute) - 1
-                    var ex = newSeq[TokenTuple]() #This collects the appropriate data
-
-                    while x < y:
-                        x = x + 1
-                        if execute[x].kind == TK_SEP:
-                            action(ex)
-                            ex = newSeq[TokenTuple]()
-                        else:
-                            add(ex, n[x]) 
-                    
-                    action(ex)
-        
-    elif n[0].value == "while":
-        if n[4].kind == TK_LSCOL:
-            if n[2].kind == TK_EQ or n[2].kind == TK_EQN:
-
-                var ex = newSeq[TokenTuple]() #This collects the appropriate data
-                var ex2 = newSeq[seq[TokenTuple]]()
-                for x in n[5 .. ^1]:
-                    if x.kind == TK_SEP:
-                        add(ex2, ex)
-                        ex = newseq[TokenTuple]()
-                    else:
-                        add(ex, x)
-
-                while whi(n[1], n[2], n[3]):
-                    for test in ex2:
-                        var e = test
-                        action(e)
+                var ex2 = factorloop(n, 5)
+                if n[0].value == "if":
+                    if whi(n[1], n[2], n[3]):
+                        for test in ex2:
+                            var test2 = test
+                            action(test2)
+                else:
+                    while whi(n[1], n[2], n[3]):
+                        for test in ex2:
+                            var e = test
+                            action(e)
     
     elif n[0].kind == TK_LOOP:
         if n[1].kind == TK_INTEGER:
-            var ex = newSeq[TokenTuple]() #This collects the appropriate data
-            var ex2 = newSeq[seq[TokenTuple]]()
-            for x in n[3 .. ^1]:
-                if x.kind == TK_SEP:
-                    add(ex2, ex)
-                    ex.setLen(0)
-                else:
-                    add(ex, x)
-
-            ex.setLen(0)
-            if declared(ex.addr):dealloc(ex.addr) #gets rid of useless variable.
-        
+            var ex2 = factorloop(n, 3)
             for i in countTo(parseInt(n[1].value) - 1):
                 for test in ex2:
                     var test2 = test

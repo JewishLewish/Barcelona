@@ -1,16 +1,6 @@
 benchmark;
 
-var x = 0;
-loop 1000000 {var x = x++;}
-garbage x;
-
-benchmark;
-
-echo "=============================";
-
-benchmark;
-
-fn main {var x = 0; loop 1000000 {var x = x++;} }
+fn main {var x = 0; loop 1000000 {var x = x++;}}
 main;
 
 benchmark;
