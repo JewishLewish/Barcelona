@@ -50,6 +50,7 @@ type
 var Vars2* = initTable[string, Variable]()
 var Fun = initTable[string, seq[TokenTuple]]()
 var Dump = initTable[string, seq[string]]() #Grabs certain variables that would exist temporarily and prepares to dump them.
+var ReCache: TokenTuple
 
 
 import tools/[tokparact] #Action Tree
@@ -84,7 +85,8 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
 
         elif n[x].kind == TK_IDENTIFIER:
             if Fun.haskey(n[x].value):
-                echo "FUNCTION!"
+                n[x].kind = ReCache.kind
+                n[x].value = ReCache.value
             else:
                 n[x].kind = Vars2[n[x].value].ty
                 n[x].value = Vars2[n[x].value].vname
@@ -199,7 +201,7 @@ proc action*(n: var seq[TokenTuple]) =
         Vars2[n[2].value] = Variable(vname: n[0].value, ty: TK_DICT)
     
     elif n[0].kind == TK_GARBAGE:
-        dealloc Vars2[n[1].value].unsafeAddr
+        Vars2.del(n[1].value)
     
     elif n[0].kind == TK_IDENTIFIER:
         var x = Fun[n[0].value][2 .. ^1]
@@ -209,20 +211,21 @@ proc action*(n: var seq[TokenTuple]) =
         
 
         for x in Dump[n[0].value]:
-            dealloc Vars2[x].ty.addr
-            dealloc Vars2[x].vname.addr
-            dealloc Vars2[x].addr #Not sure why this doesn't work?
+            Vars2.del(x)
+
+
+        if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
+            Vars2[n[2].value] = Variable(vname: ReCache.value, ty: ReCache.kind)
         
 
     elif n[0].kind == TK_FUN:
         var FunV = newSeq[TokenTuple]() #-> Collects
         var FunN: string #-> Identifies
         var i: int = -1
-        var temp: int = len(n)
         var c: int = 0 #Looks at Right/Left Colons
         var Garbage = newSeq[string]()
 
-        while i < temp - 1:
+        while i < len(n) - 1:
             i = i + 1
             if n[i].kind == TK_FUN:
                 if n[i+1].kind == TK_IDENTIFIER:
@@ -244,7 +247,6 @@ proc action*(n: var seq[TokenTuple]) =
             elif n[i].kind == TK_STRING and n[i+1].kind == TK_STRING:
                 n[i].value = n[i].value & n[i+1].value
                 n.delete(i+1)
-                temp = len(n)
                 add(FunV, n[i])
 
             elif n[i].kind == TK_VAR:
@@ -261,6 +263,9 @@ proc action*(n: var seq[TokenTuple]) =
 
         if c != 0:
             er(n[i], "Failed to properly define a function.")
+    
+    elif n[0].kind == TK_RETURN:
+        ReCache = n[1]
 
 proc main*(n: string) =
 

@@ -1,6 +1,5 @@
 import ../main
 
-
 proc actiontree2*(n: var seq[TokenTuple]): (seq[seq[TokenTuple]]) = #seperates EVERYTHING
     var collect = newSeq[TokenTuple]()
     var c: int = 0 #Looks at Right/Left Colons
