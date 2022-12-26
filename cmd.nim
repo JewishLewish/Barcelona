@@ -14,6 +14,7 @@
 
 import std/[strutils]
 import main
+import translate/bar2py
 
 while true:
     write(stdout, "-> ")
@@ -26,5 +27,8 @@ while true:
             main(input[2])
             echo " "
             #break
+        elif input[1] == "t" or input[1] == "translate":
+            if input[2] == "python":
+                pytrans(input[3])
     else:
         echo "Error."

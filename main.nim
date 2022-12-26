@@ -46,7 +46,7 @@ type
 
 var Vars2* = initTable[string, Variable]()
 var Fun = initTable[string, seq[TokenTuple]]()
-import developertools/vardefine #This is for Variables and defining them
+
 
 import tools/[tokparact] #Action Tree
 import tools/errors #Errors
