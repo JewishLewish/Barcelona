@@ -7,7 +7,8 @@ static:
     )
 
 tokens:
-    Plus      > '+'
+    Plus      > '+':
+        Inc     ? '+'
     Minus     > '-':
         LArrow  ? '>'
     Greator   > '<':
@@ -43,7 +44,6 @@ tokens:
 
 type
   Variable* = object
-    name*: string  # variable's itself value
     vname*: string # variable's holding value
     ty*: TokenKind # type of variable (String, Boolean, etc)
 
@@ -67,10 +67,10 @@ iterator countTo(n: int): int =
     yield i
     inc i
 
-proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables with values. 
-    var x: int = 0
+proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing variables with values. 
+    var x: int = start - 1
     while x < len(n) - 1:
-        x = x + 1
+        inc(x)
 
         if n[x].value == "fetch":
             if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
@@ -91,6 +91,13 @@ proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables wi
 
                 if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
                     rd(n, x)
+        
+        elif n[x].kind == TK_INC:
+            if n[x-1].kind == TK_IDENTIFIER: 
+                n[x-1].value = $(parseInt(Vars2[n[x-1].value].vname) + 1)
+            
+            n.delete(x)
+            break
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
 
@@ -111,17 +118,15 @@ proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool =
 
 proc action*(n: var seq[TokenTuple]) = 
     if n[0].value == "echo":
-        variable(n)
+        variable(n, 1)
         echo n[1].value
 
     elif n[0].value == "var":
         if n[1].kind == TK_IDENTIFIER:
             if n[2].kind == TK_ASSIGN:
-                var x = n[2 .. ^1]
-                variable(x)
-                n[2 .. ^1] = x
+                variable(n, 3)
 
-                Vars2[n[1].value] = Variable(name: n[1].value, vname: n[3].value, ty: n[3].kind)
+                Vars2[n[1].value] = Variable(vname: n[3].value, ty: n[3].kind)
 
     elif n[0].value == "if":
         if n[4].kind == TK_LSCOL:
@@ -191,7 +196,7 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].value == "request":
         request(n)
-        Vars2[n[2].value] = Variable(name: n[2].value, vname: n[0].value, ty: TK_DICT)
+        Vars2[n[2].value] = Variable(vname: n[0].value, ty: TK_DICT)
     
     elif n[0].kind == TK_GARBAGE:
         dealloc Vars2[n[1].value].unsafeAddr
@@ -206,7 +211,6 @@ proc action*(n: var seq[TokenTuple]) =
         for x in Dump[n[0].value]:
             dealloc Vars2[x].ty.addr
             dealloc Vars2[x].vname.addr
-            dealloc Vars2[x].name.addr
             dealloc Vars2[x].addr #Not sure why this doesn't work?
         
 
