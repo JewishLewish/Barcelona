@@ -30,6 +30,8 @@ tokens:
     LOOP      > "loop"
     GARBAGE   > "garbage"
     IMPORT    > "import"
+    VAR       > "var"
+    RETURN    > "return"
     Assign    > '=':
         EQ      ? '='
     EX        > '!':
@@ -37,6 +39,7 @@ tokens:
     BTrue     > @["TRUE", "True", "true", "YES", "Yes", "yes", "y"]
     BFalse    > @["FALSE", "False", "false", "NO", "No", "no", "n"]
     Dict      > "mother nature does it all for us."
+
 
 type
   Variable* = object
@@ -46,6 +49,7 @@ type
 
 var Vars2* = initTable[string, Variable]()
 var Fun = initTable[string, seq[TokenTuple]]()
+var Dump = initTable[string, seq[string]]() #Grabs certain variables that would exist temporarily and prepares to dump them.
 
 
 import tools/[tokparact] #Action Tree
@@ -77,14 +81,16 @@ proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables wi
             n[x].kind = TK_INTEGER
             n[x].value = $b
             n[x+1 .. i] = []
-        
 
         elif n[x].kind == TK_IDENTIFIER:
-            n[x].kind = Vars2[n[x].value].ty
-            n[x].value = Vars2[n[x].value].vname
+            if Fun.haskey(n[x].value):
+                echo "FUNCTION!"
+            else:
+                n[x].kind = Vars2[n[x].value].ty
+                n[x].value = Vars2[n[x].value].vname
 
-            if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
-                rd(n, x)
+                if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
+                    rd(n, x)
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
 
@@ -156,15 +162,17 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].kind == TK_LOOP:
         if n[1].kind == TK_INTEGER:
-            
             var ex = newSeq[TokenTuple]() #This collects the appropriate data
             var ex2 = newSeq[seq[TokenTuple]]()
             for x in n[3 .. ^1]:
                 if x.kind == TK_SEP:
                     add(ex2, ex)
-                    ex = newseq[TokenTuple]()
+                    ex.setLen(0)
                 else:
                     add(ex, x)
+
+            ex.setLen(0)
+            if declared(ex.addr):dealloc(ex.addr) #gets rid of useless variable.
         
             for i in countTo(parseInt(n[1].value) - 1):
                 for test in ex2:
@@ -193,13 +201,22 @@ proc action*(n: var seq[TokenTuple]) =
         for ab in actiontree2(x):
             var test = ab
             action(test) 
-    
+        
+
+        for x in Dump[n[0].value]:
+            dealloc Vars2[x].ty.addr
+            dealloc Vars2[x].vname.addr
+            dealloc Vars2[x].name.addr
+            dealloc Vars2[x].addr #Not sure why this doesn't work?
+        
+
     elif n[0].kind == TK_FUN:
         var FunV = newSeq[TokenTuple]() #-> Collects
         var FunN: string #-> Identifies
         var i: int = -1
         var temp: int = len(n)
         var c: int = 0 #Looks at Right/Left Colons
+        var Garbage = newSeq[string]()
 
         while i < temp - 1:
             i = i + 1
@@ -217,13 +234,23 @@ proc action*(n: var seq[TokenTuple]) =
                 add(FunV, n[i])
                 if c == 0:
                     Fun[FunN] = FunV
+                    Dump[FunN] = Garbage
                     FunN = ""
-                    FunV = newSeq[TokenTuple]()
+                    FunV.setLen(0)
             elif n[i].kind == TK_STRING and n[i+1].kind == TK_STRING:
                 n[i].value = n[i].value & n[i+1].value
                 n.delete(i+1)
                 temp = len(n)
                 add(FunV, n[i])
+
+            elif n[i].kind == TK_VAR:
+                if Vars2.haskey(n[i+1].value):
+                    er(n[i], "You cannot edit variables inside of functions.")
+                    break
+                else:
+                    add(FunV, n[i])
+                    add(Garbage, n[i+1].value)
+                
 
             else:
                 add(FunV, n[i])
@@ -249,7 +276,8 @@ proc main*(n: string) =
                 continue
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
-
+    
+    if declared(lex.addr):dealloc(lex.addr)
 
     var c: int = 0 #Looks at Right/Left Colons
     var collect = newSeq[TokenTuple]()
@@ -268,3 +296,4 @@ proc main*(n: string) =
 
     Vars2 = initTable[string, Variable]() #Dumps all variables at end of code to preserve memory.
     Fun = initTable[string, seq[TokenTuple]]() #Dumps all functions at end of code to preserve memory.
+    Dump = initTable[string, seq[string]]() #Dumps Fuctions's variables. 

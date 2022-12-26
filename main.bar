@@ -1,7 +1,7 @@
 benchmark;
-var x = 0;
 
-loop 100000{
+var x = 0;
+loop 1000000 {
     var x = $(x+1);
 }
 
