@@ -1,4 +1,8 @@
-var x = 2;
-var x = $(2+2);
+benchmark;
+var x = 0;
 
-x = eval(2+2);
+loop 100000{
+    var x = $(x+1);
+}
+
+benchmark;

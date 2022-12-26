@@ -7,7 +7,7 @@ client.headers = newHttpHeaders({ "Content-Type": "application/json" })
 client.headers["Authorization"] = ""
 
 proc request*(n: var seq[TokenTuple]) = 
-    var pop = 0
+    var pop = 0 #Gets rid of certain variables
     if n[3].kind != TK_RBRA:
         if n[3].kind == TK_IDENTIFIER:
             define(n[3])
@@ -20,8 +20,7 @@ proc request*(n: var seq[TokenTuple]) =
     n[0].kind = TK_DICT
     pop = pop + 2
 
-    for range in (0 .. pop):
-        n.delete(1)
+    n[1 .. pop] = []
 
 
 

@@ -76,17 +76,15 @@ proc variable*(n: var seq[TokenTuple]) = #This focuses on replacing variables wi
             var (b,i) = math(n, Vars2)
             n[x].kind = TK_INTEGER
             n[x].value = $b
-            for range in (x .. i):
-                n.delete(x+1)
+            n[x+1 .. i] = []
         
+
         elif n[x].kind == TK_IDENTIFIER:
             n[x].kind = Vars2[n[x].value].ty
             n[x].value = Vars2[n[x].value].vname
 
             if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
                 rd(n, x)
-
-            
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
 
@@ -188,7 +186,7 @@ proc action*(n: var seq[TokenTuple]) =
         Vars2[n[2].value] = Variable(name: n[2].value, vname: n[0].value, ty: TK_DICT)
     
     elif n[0].kind == TK_GARBAGE:
-        dealloc Vars2[n[2].value].unsafeAddr
+        dealloc Vars2[n[1].value].unsafeAddr
     
     elif n[0].kind == TK_IDENTIFIER:
         var x = Fun[n[0].value][2 .. ^1]
@@ -266,3 +264,7 @@ proc main*(n: string) =
                 collect = newSeq[TokenTuple]()
         elif x.kind == TK_LSCOL:
             c = c + 1
+    
+
+    Vars2 = initTable[string, Variable]() #Dumps all variables at end of code to preserve memory.
+    Fun = initTable[string, seq[TokenTuple]]() #Dumps all functions at end of code to preserve memory.

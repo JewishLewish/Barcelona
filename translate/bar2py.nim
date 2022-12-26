@@ -53,14 +53,14 @@ proc rent(n: var TokenTuple): string =
         return fmt""" "{n.value}" """.strip
     elif n.kind == TK_INTEGER:
         return n.value
-    elif n.kind == TK_MATH:
-        
+
 
 proc translate(n: var seq[TokenTuple]) = 
     var x: string
     if indent != 0:
         for range in (0 .. indent):
             x = x & "   "
+
     
 
     if n[0].value == "echo":
@@ -82,6 +82,7 @@ proc translate(n: var seq[TokenTuple]) =
         
         x = x & fmt"""{rent(n[0])} {rent(n[1])} {compare} {rent(n[3])}: """
         add(input, x)
+
 
 proc pytrans*(n: string) =
 
@@ -105,7 +106,6 @@ proc pytrans*(n: string) =
 
     var collect = newSeq[TokenTuple]()
     for x in ac:
-        add(collect, x)
         if x.kind == TK_SEP or x.kind == TK_RSCOL or x.kind == TK_LSCOL:
             translate(collect)
             collect = newSeq[TokenTuple]()
@@ -119,7 +119,7 @@ proc pytrans*(n: string) =
 
 
 
-    let f = open("test.py", fmWrite) #Writes everything it collected.
+    let f = open("cache/test.py", fmWrite) #Writes everything it collected.
     defer: f.close()
     for x in input:
         f.writeLine(x)
