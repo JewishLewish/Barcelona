@@ -6,6 +6,7 @@ let client = newHttpClient()
 client.headers = newHttpHeaders({ "Content-Type": "application/json" })
 client.headers["Authorization"] = ""
 
+
 proc request*(n: var seq[TokenTuple]) = 
     var pop = 0 #Gets rid of certain variables
     if n[3].kind != TK_RBRA:

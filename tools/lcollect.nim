@@ -15,6 +15,6 @@ proc factorloop*(n: seq[TokenTuple], start: int): (seq[seq[TokenTuple]]) =
     return ex2
 
 
-proc garbage*(n: TokenTuple) {.async.} = 
+proc garbage*(n: TokenTuple) {.async.} = #Garbage is Async. 
     for x in Dump[n.value]:
         Vars2.del(x)

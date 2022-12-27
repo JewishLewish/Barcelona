@@ -90,7 +90,9 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
         
         elif n[x].kind == TK_INC:
             if n[x-1].kind == TK_INTEGER: 
-                n[x-1].value = $(parseInt(n[x-1].value) + 1)
+                var res: int = parseInt(n[x-1].value)
+                inc(res)
+                n[x-1].value = $(res)
             
             n.delete(x)
             break
@@ -169,8 +171,7 @@ proc action*(n: var seq[TokenTuple]) =
         Vars2.del(n[1].value)
     
     elif n[0].kind == TK_IDENTIFIER:
-        var x = Fun[n[0].value][2 .. ^1]
-        for ab in actiontree2(x):
+        for ab in actiontree2(Fun[n[0].value]):
             var test = ab
             action(test) 
         
@@ -178,6 +179,7 @@ proc action*(n: var seq[TokenTuple]) =
 
         if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
             Vars2[n[2].value] = Variable(vname: ReCache.value, ty: ReCache.kind)
+        n.setLen(0)
 
         waitfor time
         
@@ -190,7 +192,7 @@ proc action*(n: var seq[TokenTuple]) =
         var Garbage = newSeq[string]()
 
         while i < len(n) - 1:
-            i = i + 1
+            inc(i)
             if n[i].kind == TK_FUN:
                 if n[i+1].kind == TK_IDENTIFIER:
                     if c == 0:
@@ -198,10 +200,10 @@ proc action*(n: var seq[TokenTuple]) =
                     else:
                         er(n[i], "You cannot define functions inside of functions.")
             elif n[i].kind == TK_LSCOL:
-                c = c + 1
+                inc(c)
                 add(FunV, n[i])
             elif n[i].kind == TK_RSCOL:
-                c = c - 1
+                dec(c)
                 add(FunV, n[i])
                 if c == 0:
                     Fun[FunN] = FunV
@@ -254,21 +256,22 @@ proc main*(n: string) =
     
     if declared(lex.addr):dealloc(lex.addr)
 
+
     var c: int = 0 #Looks at Right/Left Colons
     var collect = newSeq[TokenTuple]()
     for x in ac:
         add(collect, x)
         if x.kind == TK_SEP or x.kind == TK_RSCOL:
             if x.kind == TK_RSCOL:
-                c = c - 1
+                dec(c)
             
             if c == 0:
                 action(collect)
                 collect.setLen(0)
         elif x.kind == TK_LSCOL:
-            c = c + 1
+            inc(c)
     
-
+    ac.setLen(0)
     Vars2 = initTable[string, Variable]() #Dumps all variables at end of code to preserve memory.
     Fun = initTable[string, seq[TokenTuple]]() #Dumps all functions at end of code to preserve memory.
     Dump = initTable[string, seq[string]]() #Dumps Fuctions's variables. 

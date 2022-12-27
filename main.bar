@@ -1,3 +1,10 @@
-fetch "test" -> x;
-
-echo x;
+benchmark;
+fn main {
+    var x = 0;
+    loop 1000000 {
+    var x = x++;
+    }
+    echo x;
+}
+main;
+benchmark;
