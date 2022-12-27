@@ -1,3 +1,5 @@
+# Performed using -> b r examples/million.bar
+
 benchmark;
 
 fn main {
@@ -10,3 +12,6 @@ fn main {
 main;
 
 benchmark;
+
+
+# .37~ seconds runtime.

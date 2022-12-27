@@ -15,8 +15,8 @@ tokens:
     Greator   > '<':
         RArrow ? '-'
     Multi     > '*'
-    Div       > '/':
-        BlockComment ? '*' .. "*/"
+    Div       > '/'
+    BLOCKCOMMENT   > '#' .. EOL
     LCol      > '('
     RCol      > ')'
     LBRA      > '['
@@ -93,8 +93,8 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
                 rd(n, x)
         
         elif n[x].kind == TK_INC:
-            if n[x-1].kind == TK_IDENTIFIER: 
-                n[x-1].value = $(parseInt(Vars2[n[x-1].value].vname) + 1)
+            if n[x-1].kind == TK_INTEGER: 
+                n[x-1].value = $(parseInt(n[x-1].value) + 1)
             
             n.delete(x)
             break
@@ -173,7 +173,7 @@ proc action*(n: var seq[TokenTuple]) =
             var test = ab
             action(test) 
         
-        let time = garbage(n[0])
+        let time = garbage(n[0]) #Async Garbage Disposal
 
         if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
             Vars2[n[2].value] = Variable(vname: ReCache.value, ty: ReCache.kind)
@@ -207,6 +207,7 @@ proc action*(n: var seq[TokenTuple]) =
                     Dump[FunN] = Garbage
                     FunN = ""
                     FunV.setLen(0)
+                    Garbage.setLen(0)
             elif n[i].kind == TK_STRING and n[i+1].kind == TK_STRING:
                 n[i].value = n[i].value & n[i+1].value
                 n.delete(i+1)
@@ -218,8 +219,7 @@ proc action*(n: var seq[TokenTuple]) =
                     break
                 else:
                     add(FunV, n[i])
-                    add(Garbage, n[i+1].value)
-                
+                    add(Garbage, n[i+1].value)    
 
             else:
                 add(FunV, n[i])
