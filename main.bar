@@ -1,12 +1,6 @@
-benchmark;
-
+var x = "Hello world";
 fn main {
-    var x = 0;
-    loop 1000000 {
-        var x = x++;
-    }
-    echo x;
-}
+    echo x; <- In a situation like this, the variable is not being changed. It will compile.
+}               
 main;
-
-benchmark;
+garbage x;
