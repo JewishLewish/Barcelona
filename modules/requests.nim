@@ -4,21 +4,28 @@ import ../developertools/vardefine
 
 let client = newHttpClient()
 client.headers = newHttpHeaders({ "Content-Type": "application/json" })
-client.headers["Authorization"] = ""
+client.headers["Authorization"] = "ptla_4OXn6z9hQZQ09XZX8WL1SdlrEjewuJNTrcTrVxQuZK4"
 
 
-proc request*(n: var seq[TokenTuple]) = 
+proc request*(n: var seq[TokenTuple]) = #request("name of location", "auth") ...
     var pop = 0 #Gets rid of certain variables
-    if n[3].kind != TK_RBRA:
-        if n[3].kind == TK_IDENTIFIER:
-            (n[3].value, n[3].kind) = define(n[3])
-        
-        client.headers["Authorization"] = n[3].value
-        pop = pop + 1
+
+    if n[3].kind == TK_SEPERATOR: #THis is for variables
+        if n[4].kind == TK_IDENTIFIER:
+            (n[4].value, n[4].kind) = define(n[4])
+
+        client.headers["Authorization"] = n[4].value
+        pop = pop + 3
     
     let response2 = client.get(n[2].value)
-    n[0].value = response2.body
-    n[0].kind = TK_DICT
+    case n[0].value
+    of "request":
+        n[0].value = response2.body
+        n[0].kind = TK_DICT
+    of "status":
+        n[0].value = response2.status
+        n[0].kind = TK_STRING
+
     pop = pop + 2
 
     n[1 .. pop] = []

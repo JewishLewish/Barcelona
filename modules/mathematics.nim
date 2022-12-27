@@ -11,17 +11,17 @@ proc math*(n: var seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) =
     
     for x in n:
         if track == 1:
-            i = i + 1
+            inc(i)
             if x.kind == TK_INTEGER:
                 add(expression, x.value)
             elif x.kind == TK_PLUS:
                 add(expression, "+")
             elif x.kind == TK_LCOL:
                 add(expression, "(")
-                c = c + 1
+                dec(c)
             elif x.kind == TK_RCOL:
                 add(expression, ")")
-                c = c - 1
+                dec(c)
                 if c == 0:
                     track = 0
                     break
@@ -30,7 +30,6 @@ proc math*(n: var seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) =
                 add(expression, Vars2[x.value].vname)
 
         elif x.kind == TK_MATH:
-            track = 1
-
+            inc(track)
     
     return (e.eval(expression).int, i)
