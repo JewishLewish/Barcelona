@@ -155,6 +155,8 @@ proc action*(n: var seq[TokenTuple]) =
     
     elif n[0].value == "fetch":
         fetch(n, 0)
+        if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
+            Vars2[n[2].value] = Variable(vname: n[0].value, ty: n[0].kind)
     
     elif n[0].value == "benchmark":
         benchmark()
