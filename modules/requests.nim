@@ -10,7 +10,7 @@ proc request*(n: var seq[TokenTuple]) =
     var pop = 0 #Gets rid of certain variables
     if n[3].kind != TK_RBRA:
         if n[3].kind == TK_IDENTIFIER:
-            define(n[3])
+            (n[3].value, n[3].kind) = define(n[3])
         
         client.headers["Authorization"] = n[3].value
         pop = pop + 1

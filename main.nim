@@ -125,7 +125,6 @@ proc action*(n: var seq[TokenTuple]) =
         if n[1].kind == TK_IDENTIFIER:
             if n[2].kind == TK_ASSIGN:
                 variable(n, 3)
-
                 Vars2[n[1].value] = Variable(vname: n[3].value, ty: n[3].kind)
 
     elif n[0].value == "if" or n[0].value == "while":
