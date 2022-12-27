@@ -19,8 +19,6 @@ proc delete*(n: var seq[TokenTuple]) =
 
 proc fetch*(n :var seq[TokenTuple], x: int) =
     var jsonfile = parseJson(readFile("main.json"))
-    n[x].value = jsonfile[n[x+2].value].getStr
+    n[x].value = jsonfile[n[x+1].value].getStr
     n[x].kind = TK_STRING
-    n.delete(x+1)
-    n.delete(x+1)
     n.delete(x+1)

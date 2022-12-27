@@ -74,12 +74,8 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
     var x: int = start - 1
     while x < len(n) - 1:
         inc(x)
-
-        if n[x].value == "fetch":
-            if n[x+1].kind == TK_LCOL and n[x+3].kind == TK_RCOL:
-                fetch(n, x)
         
-        elif n[x].kind == TK_MATH:
+        if n[x].kind == TK_MATH:
             var (b,i) = math(n, Vars2)
             n[x].kind = TK_INTEGER
             n[x].value = $b
@@ -157,6 +153,9 @@ proc action*(n: var seq[TokenTuple]) =
     elif n[0].value == "delete":
         delete(n)
     
+    elif n[0].value == "fetch":
+        fetch(n, 0)
+    
     elif n[0].value == "benchmark":
         benchmark()
     
@@ -220,7 +219,7 @@ proc action*(n: var seq[TokenTuple]) =
                 else:
                     add(FunV, n[i])
                     add(Garbage, n[i+1].value)    
-            elif n[i].value == "garbage":
+            elif n[i].kind == TK_GARBAGE:
                 warning(n[i], "Garbage syntax isn't required for functions")
 
             else:
