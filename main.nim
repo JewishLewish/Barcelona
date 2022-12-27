@@ -1,3 +1,4 @@
+{.deadCodeElim: on.}
 import tables
 import toktok
 static:
@@ -49,12 +50,12 @@ type
 
 var Vars2* = initTable[string, Variable]()
 var Fun = initTable[string, seq[TokenTuple]]()
-var Dump = initTable[string, seq[string]]() #Grabs certain variables from functionsthat would exist temporarily and prepares to dump them.
+var Dump* = initTable[string, seq[string]]() #Grabs certain variables from functionsthat would exist temporarily and prepares to dump them.
 var ReCache: TokenTuple
 
+import asyncdispatch
 
-import tools/[tokparact] #Action Tree
-import tools/errors #Errors
+import tools/[tokparact, errors] #Action Tree
 import tools/lcollect
 import modules/dict
 import modules/bm
@@ -85,15 +86,11 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
             n[x+1 .. i] = []
 
         elif n[x].kind == TK_IDENTIFIER:
-            if Fun.haskey(n[x].value):
-                n[x].kind = ReCache.kind
-                n[x].value = ReCache.value
-            else:
-                n[x].kind = Vars2[n[x].value].ty
-                n[x].value = Vars2[n[x].value].vname
+            n[x].kind = Vars2[n[x].value].ty
+            n[x].value = Vars2[n[x].value].vname
 
-                if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
-                    rd(n, x)
+            if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
+                rd(n, x)
         
         elif n[x].kind == TK_INC:
             if n[x-1].kind == TK_IDENTIFIER: 
@@ -177,13 +174,12 @@ proc action*(n: var seq[TokenTuple]) =
             var test = ab
             action(test) 
         
-
-        for x in Dump[n[0].value]:
-            Vars2.del(x)
-
+        let time = garbage(n[0])
 
         if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
             Vars2[n[2].value] = Variable(vname: ReCache.value, ty: ReCache.kind)
+
+        waitfor time
         
 
     elif n[0].kind == TK_FUN:
@@ -266,7 +262,7 @@ proc main*(n: string) =
             
             if c == 0:
                 action(collect)
-                collect = newSeq[TokenTuple]()
+                collect.setLen(0)
         elif x.kind == TK_LSCOL:
             c = c + 1
     

@@ -1,6 +1,8 @@
 import ../main
+import asyncdispatch
+import tables
 
-proc factorloop*(n: var seq[TokenTuple], start: int): (seq[seq[TokenTuple]]) =
+proc factorloop*(n: seq[TokenTuple], start: int): (seq[seq[TokenTuple]]) =
     var ex = newSeq[TokenTuple]() #This collects the appropriate data
     var ex2 = newSeq[seq[TokenTuple]]()
     for x in n[start .. ^1]:
@@ -11,3 +13,8 @@ proc factorloop*(n: var seq[TokenTuple], start: int): (seq[seq[TokenTuple]]) =
             add(ex, x)
     
     return ex2
+
+
+proc garbage*(n: TokenTuple) {.async.} = 
+    for x in Dump[n.value]:
+        Vars2.del(x)

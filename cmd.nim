@@ -11,7 +11,7 @@
 # _______________________
 # r / run -> Opens a barcelona coded file (or ending in .bar)
 # t / translate <python/rust> -> Translates the barcelona file to a python or rust file 
-
+{.deadCodeElim: on.}
 import std/[strutils]
 import main
 import translate/bar2py
