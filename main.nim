@@ -277,6 +277,11 @@ proc main*(n: string) =
                 collect.setLen(0)
         of TK_LSCOL:
             inc(c)
+        of TK_STRING:
+            if collect[^2].kind == TK_STRING: #["Hello world"]#
+                collect[^2].value = collect[^2].value & collect[^1].value
+                warning(x, "It's recommended to not break apart strings as it causes the lexer to tokenize more input.")
+                collect.delete(len(collect) - 1)
         else:
             continue
 

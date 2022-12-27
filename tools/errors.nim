@@ -1,7 +1,7 @@
 import ../main
 import std/terminal
 
-proc er*(n: var TokenTuple, p: string) = #seperates EVERYTHING
+proc er*(n: TokenTuple, p: string) = #seperates EVERYTHING
     let x = n
     stdout.styledWriteLine(fgCyan, "--> Line: ", $x.line)
     stdout.styledWriteLine(fgRed, " # Error")
@@ -15,9 +15,9 @@ proc er*(n: var TokenTuple, p: string) = #seperates EVERYTHING
     quit()
 
 
-proc warning*(n: var TokenTuple, p:string) = #Gives warning
+proc warning*(n: TokenTuple, p:string) = #Gives warning
     let x = n
-    stdout.styledWriteLine(fgCyan, "--> Line: ", $x.line)
+    stdout.styledWriteLine(fgCyan, "--> Line: ", $x.line, ",     Token: ", $x.kind)
     stdout.styledWriteLine(fgYellow, " # Warning")
     stdout.styledWriteLine(fgYellow, " # ")
     stdout.styledWriteLine(fgYellow, " #    ", p)
