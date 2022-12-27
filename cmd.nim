@@ -24,7 +24,12 @@ while true:
     if input[0] in ["b", "bar", "barcelona"]:
         if input[1] == "r" or input[1] == "run":
             echo " "
-            main(input[2])
+            try:
+                main(input[2])
+            except Exception as e:
+                echo e.msg
+
+
             echo " "
             #break
         elif input[1] == "t" or input[1] == "translate":

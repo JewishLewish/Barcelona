@@ -220,6 +220,8 @@ proc action*(n: var seq[TokenTuple]) =
                 else:
                     add(FunV, n[i])
                     add(Garbage, n[i+1].value)    
+            elif n[i].value == "garbage":
+                warning(n[i], "Garbage syntax isn't required for functions")
 
             else:
                 add(FunV, n[i])
