@@ -63,7 +63,7 @@ import modules/bm
 import modules/requests
 import modules/mathematics #Mathematics
 
-from strutils import parseInt
+import tools/strtoint
 
 iterator countTo(n: int): int =
   var i = 0
@@ -133,7 +133,7 @@ proc action*(n: var seq[TokenTuple]) =
 
         of "inc":
             if n[1].kind == TK_IDENTIFIER:
-                Vars2[n[1].value] = Variable(vname: $(parseInt(Vars2[n[1].value].vname) + 1), ty: TK_INTEGER)
+                Vars2[n[1].value] = Variable(vname: $(PI(Vars2[n[1].value].vname) + 1), ty: TK_INTEGER)
             else:
                 echo "Error."
 
@@ -178,7 +178,7 @@ proc action*(n: var seq[TokenTuple]) =
         of TK_LOOP:
             if n[1].kind == TK_INTEGER:
                 var ex2 = factorloop(n, 3)
-                for _ in countTo(parseInt(n[1].value) - 1):
+                for _ in countTo(PI(n[1].value) - 1):
                     for test in ex2:
                         var temp = test
                         action(temp)

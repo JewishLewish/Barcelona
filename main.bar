@@ -1,3 +1,4 @@
+benchmark;
 fn main {
     var x = 0;
     loop 1000000 {
@@ -6,3 +7,4 @@ fn main {
     echo x;
 }
 main;
+benchmark;
