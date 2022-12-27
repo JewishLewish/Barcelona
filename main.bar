@@ -1,13 +1,8 @@
-#benchmark;
-#var auth = "Bearer ptla_4OXn6z9hQZQ09XZX8WL1SdlrEjewuJNTrcTrVxQuZK4";
-#status("https://panel.lunes.host/api/application/nodes", auth) -> x;
-#echo x;
-#benchmark;
-
-benchmark;
-var x = 0;
-loop 1000000 { 
-    var x = x++;
+fn main {
+    var x = 0;
+    loop 1000000 {
+        inc x;
+    }
+    echo x;
 }
-echo "Done";
-benchmark;
+main;

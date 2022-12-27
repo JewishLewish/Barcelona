@@ -5,7 +5,7 @@ benchmark;
 fn main {
     var x = 0;
     loop 1000000 {
-        var x = x++;
+        inc x; # -> Increments value by 1
     }
     echo x;
 }
@@ -14,4 +14,4 @@ main;
 benchmark;
 
 
-# .37~ seconds runtime.
+# .22~ seconds runtime.

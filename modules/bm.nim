@@ -10,3 +10,4 @@ proc benchmark*() =
         echo "\nExecution time:"
         echo cpuTime() - time
         track = 0
+    

@@ -88,13 +88,6 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
 
             if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
                 rd(n, x)
-        
-        elif n[x].kind == TK_INC:
-            if n[x-1].kind == TK_INTEGER: 
-                n[x-1].value = $(parseInt(n[x-1].value) + 1)
-            
-            n.delete(x)
-            break
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
 
@@ -137,6 +130,13 @@ proc action*(n: var seq[TokenTuple]) =
         of "request", "status":
             request(n)
             Vars2[n[2].value] = Variable(vname: n[0].value, ty: n[0].kind)
+
+        of "inc":
+            if n[1].kind == TK_IDENTIFIER:
+                Vars2[n[1].value] = Variable(vname: $(parseInt(Vars2[n[1].value].vname) + 1), ty: TK_INTEGER)
+            else:
+                echo "Error."
+
         else:
             for ab in actiontree2(Fun[n[0].value]):
                 var test = ab
