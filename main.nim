@@ -76,18 +76,25 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
     while x < len(n) - 1:
         inc(x)
         
-        if n[x].kind == TK_MATH:
+        case n[x].kind:
+        of TK_MATH:
             var (b,i) = math(n, Vars2)
             n[x].kind = TK_INTEGER
             n[x].value = $b
             n[x+1 .. i] = []
 
-        elif n[x].kind == TK_IDENTIFIER:
+        of TK_IDENTIFIER:
             n[x].kind = Vars2[n[x].value].ty
             n[x].value = Vars2[n[x].value].vname
 
             if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
                 rd(n, x)
+            elif n[x].kind == TK_STRING:
+                n[x-1].value = n[x-1].value & n[x].value
+                warning(n[x], "It's recommended to not break apart strings as it causes the lexer to tokenize more input.")
+                n.delete(x)
+        else:
+            continue
       
 proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
 
@@ -277,11 +284,6 @@ proc main*(n: string) =
                 collect.setLen(0)
         of TK_LSCOL:
             inc(c)
-        of TK_STRING:
-            if collect[^2].kind == TK_STRING: #["Hello world"]#
-                collect[^2].value = collect[^2].value & collect[^1].value
-                warning(x, "It's recommended to not break apart strings as it causes the lexer to tokenize more input.")
-                collect.delete(len(collect) - 1)
         else:
             continue
 

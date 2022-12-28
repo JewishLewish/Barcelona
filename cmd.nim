@@ -27,9 +27,6 @@ while true:
                 main(input[2])
             except Exception as e:
                 echo e.msg
-
-
             echo " "
-            #breakS
     else:
         echo "Error."

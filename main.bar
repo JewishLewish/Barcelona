@@ -1,1 +1,2 @@
-echo "Hello " "World";
+var x = "World";
+echo "Hello " x;
