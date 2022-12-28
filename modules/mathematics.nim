@@ -3,7 +3,7 @@ import tables
 import mathexpr
 let e = newEvaluator()
 
-proc math*(n: var seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) = 
+proc math*(n: seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) = 
     var expression = ""
     var i = 0
     var c = 0

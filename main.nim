@@ -163,7 +163,6 @@ proc action*(n: var seq[TokenTuple]) =
                     else:
                         Vars2[n[2].value] = Variable(vname: ReCache.value, ty: ReCache.kind)
                         ReCache = (kind: TK_INTEGER, value: "", wsno: 0, line: 0, col: 0, pos: 0)
-
                 n.setLen(0)
 
                 waitfor time
@@ -284,7 +283,7 @@ proc main*(n: string) =
     if declared(lex.addr):dealloc(lex.addr)
 
 
-    var c: int8 = 0 #Looks at Right/Left Colons
+    var c: uint8 = 0 #Looks at Right/Left Colons
     var collect = newSeq[TokenTuple]()
     for x in ac:
         add(collect, x)
