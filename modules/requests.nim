@@ -4,8 +4,6 @@ import ../developertools/vardefine
 
 let client = newHttpClient()
 client.headers = newHttpHeaders({ "Content-Type": "application/json" })
-client.headers["Authorization"] = "ptla_4OXn6z9hQZQ09XZX8WL1SdlrEjewuJNTrcTrVxQuZK4"
-
 
 proc request*(n: var seq[TokenTuple]) = #request("name of location", "auth") ...
     var pop = 0 #Gets rid of certain variables

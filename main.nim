@@ -62,8 +62,8 @@ import modules/dict
 import modules/bm
 import modules/requests
 import modules/mathematics #Mathematics
-
 import tools/strtoint
+import developertools/vardefine
 
 iterator countTo(n: int): int =
   var i = 0
@@ -71,8 +71,8 @@ iterator countTo(n: int): int =
     yield i
     inc i
 
-proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing variables with values. 
-    var x: int = start - 1
+proc variable*(n: var seq[TokenTuple], start: int8) = #This focuses on replacing variables with values. 
+    var x: int8 = start - 1
     while x < len(n) - 1:
         inc(x)
         
@@ -84,8 +84,7 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
             n[x+1 .. i] = []
 
         of TK_IDENTIFIER:
-            n[x].kind = Vars2[n[x].value].ty
-            n[x].value = Vars2[n[x].value].vname
+            (n[x].value, n[x].kind) = define(n[x])
 
             if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
                 rd(n, x)
@@ -96,7 +95,7 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
         else:
             continue
       
-proc whi(n: var TokenTuple, det: var TokenTuple, n2: var TokenTuple): bool = 
+proc whi(n: TokenTuple, det: TokenTuple, n2: TokenTuple): bool = 
 
     var x = n.value
     var x2 = n2.value
@@ -211,8 +210,8 @@ proc action*(n: var seq[TokenTuple]) =
             var
                 FunV = newSeq[TokenTuple]() #-> Collects
                 FunN: string #-> Identifies
-                i: int = -1
-                c: int = 0 #Looks at Right/Left Colons
+                i: int8 = -1
+                c: int8 = 0 #Looks at Right/Left Colons
                 Garbage = newSeq[string]()
 
             while i < len(n) - 1:
@@ -258,12 +257,8 @@ proc action*(n: var seq[TokenTuple]) =
     
         of TK_RETURN:
             if n[1].kind == TK_IDENTIFIER:
-                n[1].kind = Vars2[n[1].value].ty
-                n[1].value = Vars2[n[1].value].vname
-                Recache = n[1]
-            else:
-                ReCache = n[1]
-        
+                (n[1].value, n[1].kind) = define(n[1])
+            Recache = n[1]        
         else:
             echo ""
 
@@ -289,7 +284,7 @@ proc main*(n: string) =
     if declared(lex.addr):dealloc(lex.addr)
 
 
-    var c: int = 0 #Looks at Right/Left Colons
+    var c: int8 = 0 #Looks at Right/Left Colons
     var collect = newSeq[TokenTuple]()
     for x in ac:
         add(collect, x)
