@@ -277,11 +277,11 @@ proc main*(n: string) =
     else:
         while true:
             let curr = lex.getToken()
-            
-            if curr.kind == TK_EOF: 
+            case curr.kind:
+            of TK_EOF: 
                 add(ac, curr)
                 break
-            elif curr.kind == TK_BLOCKCOMMENT:
+            of TK_BLOCKCOMMENT:
                 continue
             else:
                 add(ac, curr) # tuple[kind: TokenKind, value: string, wsno: col, line: int]
