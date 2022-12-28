@@ -89,7 +89,7 @@ proc variable*(n: var seq[TokenTuple], start: int) = #This focuses on replacing 
 
             if n[x].kind == TK_DICT and n[x+1].kind == TK_LBRA:
                 rd(n, x)
-            elif n[x].kind == TK_STRING:
+            elif n[x].kind == TK_STRING and n[x-1].kind == TK_STRING:
                 n[x-1].value = n[x-1].value & n[x].value
                 warning(n[x], "It's recommended to not break apart strings as it causes the lexer to tokenize more input.")
                 n.delete(x)
@@ -122,6 +122,8 @@ proc action*(n: var seq[TokenTuple]) =
         
         of "record":
             record(n)
+            if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
+                Vars2[n[2].value] = Variable(vname: n[0].value, ty: n[0].kind)
     
         of "delete":
             delete(n)
@@ -145,17 +147,29 @@ proc action*(n: var seq[TokenTuple]) =
                 echo "Error."
 
         else:
-            for ab in actiontree2(Fun[n[0].value]):
-                var test = ab
-                action(test) 
-        
-            let time = garbage(n[0]) #Async Garbage Disposal
+            if Vars2.haskey(n[0].value):
+                if n[1].kind == TK_EQ and n[2].kind == TK_IDENTIFIER:
+                    Vars2[n[0].value] = Variable(vname: n[2].value, ty: n[2].kind)
 
-            if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
-                Vars2[n[2].value] = Variable(vname: ReCache.value, ty: ReCache.kind)
-            n.setLen(0)
+            elif Fun.haskey(n[0].value):
+                for ab in actiontree2(Fun[n[0].value]):
+                    var test = ab
+                    action(test) 
+            
+                let time = garbage(n[0]) #Async Garbage Disposal
 
-            waitfor time
+                if n[1].kind == TK_LARROW and n[2].kind == TK_IDENTIFIER:
+                    if ReCache.kind == TK_INTEGER and ReCache.value == "": #This is default. If Recache is NEVER DEFINED!
+                        er(n[2], "You cannot define a variable when there is no return in the function.")
+                    else:
+                        Vars2[n[2].value] = Variable(vname: ReCache.value, ty: ReCache.kind)
+                        ReCache = (kind: TK_INTEGER, value: "", wsno: 0, line: 0, col: 0, pos: 0)
+
+                n.setLen(0)
+
+                waitfor time
+            else:
+                er(n[0], "This is neither a declared variable or function.")
 
 
     else: #RESERVE KEYWORDS!
@@ -243,10 +257,15 @@ proc action*(n: var seq[TokenTuple]) =
                 er(n[i], "Failed to properly define a function.")
     
         of TK_RETURN:
-            ReCache = n[1]
+            if n[1].kind == TK_IDENTIFIER:
+                n[1].kind = Vars2[n[1].value].ty
+                n[1].value = Vars2[n[1].value].vname
+                Recache = n[1]
+            else:
+                ReCache = n[1]
         
         else:
-            echo n
+            echo ""
 
 proc main*(n: string) =
 
@@ -286,6 +305,10 @@ proc main*(n: string) =
             inc(c)
         else:
             continue
+    
+    if len(collect) > 1:
+        warning(collect[len(collect) - 1], "You forgot to use ';' at the end of the syntax.")
+        collect.setLen(0)
 
     Vars2 = initTable[string, Variable]() #Dumps all variables at end of code to preserve memory.
     Fun = initTable[string, seq[TokenTuple]]() #Dumps all functions at end of code to preserve memory.

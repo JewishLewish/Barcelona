@@ -10,12 +10,15 @@ client.headers["Authorization"] = "ptla_4OXn6z9hQZQ09XZX8WL1SdlrEjewuJNTrcTrVxQu
 proc request*(n: var seq[TokenTuple]) = #request("name of location", "auth") ...
     var pop = 0 #Gets rid of certain variables
 
+    if n[2].kind == TK_IDENTIFIER:
+        (n[2].value, n[2].kind) = define(n[2])
+
     if n[3].kind == TK_SEPERATOR: #THis is for variables
         if n[4].kind == TK_IDENTIFIER:
             (n[4].value, n[4].kind) = define(n[4])
 
         client.headers["Authorization"] = n[4].value
-        pop = pop + 3
+        pop = pop + 2
     
     let response2 = client.get(n[2].value)
     case n[0].value
@@ -26,7 +29,7 @@ proc request*(n: var seq[TokenTuple]) = #request("name of location", "auth") ...
         n[0].value = response2.status
         n[0].kind = TK_STRING
 
-    pop = pop + 2
+    pop = pop + 3
 
     n[1 .. pop] = []
 

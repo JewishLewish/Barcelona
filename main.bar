@@ -1,2 +1,55 @@
-var x = "World";
-echo "Hello " x;
+benchmark;
+
+# Hello world 
+echo "Hello world";
+
+#Variable - Declaring and Disposing 
+var x = "string";
+x = "Hello world"; 
+echo x;
+
+#Mathematics
+var y = 2; #-> Variables must be declared first!
+inc y;
+y = $(x+2);
+echo y; #-> 5
+
+garbage x; # -> Manual Garbage Disposal 
+garbage y;
+
+
+#If / While / loop
+
+if "test" == "test" {
+    echo "It works!";
+}
+
+while "test" != "test" {
+    echo "it doesn't.";
+}
+
+loop 10 {
+    echo "Hello!";
+}
+
+#Functions 
+fn main {
+    var x = "Hey!";
+    echo x;
+    return x;
+}       # You cannot mutate variables already declared OUTSIDE the function. They can be called but not changed.
+
+main -> fx;
+echo fx;
+
+
+var site = "https://catfact.ninja/fact";
+status(site) -> sitestatus;
+echo sitestatus;
+
+
+request(site) -> catfact;
+echo catfact;
+echo catfact["fact"];
+
+benchmark; #-> Barcelona has a built-in benchmark tool. Type "benchmark;" between lines of code to test the speed of certain code.
