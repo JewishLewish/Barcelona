@@ -141,7 +141,7 @@ proc action*(n: var seq[TokenTuple]) =
 
         of "inc":
             if n[1].kind == TK_IDENTIFIER:
-                Vars2[n[1].value] = Variable(vname: $(Cinc(Vars2[n[1].value].vname)), ty: TK_INTEGER)
+                Vars2[n[1].value] = Variable(vname: Cinc(Vars2[n[1].value].vname), ty: TK_INTEGER)
             else:
                 echo "Error."
 

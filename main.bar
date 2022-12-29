@@ -3,5 +3,4 @@ var x = 0;
 loop 1000000 {
     inc x;
 }
-echo x;
 benchmark;
