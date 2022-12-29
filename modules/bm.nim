@@ -1,13 +1,14 @@
-from std/times import cpuTime
+{.compile: "timings.c".}
+proc timing(a: cdouble): cint {.importc, varargs.}
 
-var time: float = 0
+var t:cint = 0
 var track = 0
 proc benchmark*() = 
     if track == 0:
-        time = cpuTime()
-        track = 1
+        t = timing(0)
+        inc(track)
     else:
         echo "\nExecution time:"
-        echo cpuTime() - time
-        track = 0
+        echo (timing(0) - t)/1000
+        dec(track)
     

@@ -1,6 +1,10 @@
 benchmark;
-var x = 0;
-loop 1000000 {
-    inc x;
+fn main {
+
+    var x = 0;
+    loop 1000000 {
+        inc x;
+    }
 }
+main;
 benchmark;
