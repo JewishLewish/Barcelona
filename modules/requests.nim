@@ -6,7 +6,7 @@ let client = newHttpClient()
 client.headers = newHttpHeaders({ "Content-Type": "application/json" })
 
 proc request*(n: var seq[TokenTuple]) = #request("name of location", "auth") ...
-    var pop = 0 #Gets rid of certain variables
+    var pop:int8 = 0 #Gets rid of certain variables
 
     if n[2].kind == TK_IDENTIFIER:
         (n[2].value, n[2].kind) = define(n[2])
@@ -28,7 +28,6 @@ proc request*(n: var seq[TokenTuple]) = #request("name of location", "auth") ...
         n[0].kind = TK_STRING
 
     pop = pop + 3
-
     n[1 .. pop] = []
 
 

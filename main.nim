@@ -133,7 +133,8 @@ proc action*(n: var seq[TokenTuple]) =
                 Vars2[n[2].value] = Variable(vname: n[0].value, ty: n[0].kind)
     
         of "benchmark":
-            benchmark()
+            let time = benchmark()
+            waitfor time
     
         of "request", "status":
             request(n)

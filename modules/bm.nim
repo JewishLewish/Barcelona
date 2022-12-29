@@ -1,8 +1,9 @@
 from std/times import cpuTime
+import asyncdispatch
 
 var time: float = 0
 var track = 0
-proc benchmark*() = 
+proc benchmark*() {.async.}= 
     if track == 0:
         time = cpuTime()
         track = 1
