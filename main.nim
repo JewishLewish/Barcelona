@@ -65,12 +65,6 @@ import modules/mathematics #Mathematics
 import tools/strtoint
 import developertools/vardefine
 
-iterator countTo(n: int): int =
-  var i = 0
-  while i <= n:
-    yield i
-    inc i
-
 proc variable*(n: var seq[TokenTuple], start: int8) = #This focuses on replacing variables with values. 
     var x: int8 = start - 1
     while x < len(n) - 1:
@@ -144,7 +138,7 @@ proc action*(n: var seq[TokenTuple]) =
             if n[1].kind == TK_IDENTIFIER:
                 Vars2[n[1].value] = Variable(vname: Cinc(Vars2[n[1].value].vname), ty: TK_INTEGER)
             else:
-                echo "Error."
+                er(n[0], "Incrementing can only be used with variables")
 
         else:
             if Vars2.haskey(n[0].value):
@@ -198,7 +192,7 @@ proc action*(n: var seq[TokenTuple]) =
         of TK_LOOP:
             if n[1].kind == TK_INTEGER:
                 var ex2 = factorloop(n, 3)
-                for _ in countTo(PI(n[1].value) - 1):
+                for _ in (0 .. PI(n[1].value) - 1):
                     for test in ex2:
                         var temp = test
                         action(temp)
