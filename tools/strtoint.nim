@@ -1,11 +1,9 @@
-from strutils import parseInt
-
 {.compile: "inc.c".}
 proc StrInc(a: cstring): int {.importc, varargs}
+proc Parsetoint(a: cstring): int {.importc, varargs}
 
-
-proc PI*(n: string): int =
-    return parseInt(n) 
+proc PI*(x: string):int = 
+    return Parsetoint(x)
 
 proc Cinc*(n: string): string =
     return $StrInc(n)
