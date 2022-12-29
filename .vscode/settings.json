@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.nim": "nim",
+        "stdio.h": "c"
+    }
+}

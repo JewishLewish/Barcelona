@@ -1,4 +1,7 @@
 benchmark;
-echo "Hello world";
-echo "Is anyone there?";
+var x = 0;
+loop 1000000 {
+    inc x;
+}
+echo x;
 benchmark;
