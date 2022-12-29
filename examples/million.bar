@@ -7,7 +7,7 @@ fn main {
     loop 1000000 {
         inc x; # -> Increments value by 1
     }
-    echo x;
+    return x;
 }
 main;
 

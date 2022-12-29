@@ -31,7 +31,6 @@ tokens:
     WHILE     > "while"
     LOOP      > "loop"
     GARBAGE   > "garbage"
-    IMPORT    > "import"
     VAR       > "var"
     RETURN    > "return"
     Seperator > ','
@@ -141,9 +140,15 @@ proc action*(n: var seq[TokenTuple]) =
                 er(n[0], "Incrementing can only be used with variables")
 
         else:
-            if Vars2.haskey(n[0].value):
-                if n[1].kind == TK_EQ and n[2].kind == TK_IDENTIFIER:
-                    Vars2[n[0].value] = Variable(vname: n[2].value, ty: n[2].kind)
+            if n[1].kind == TK_ASSIGN:
+                if Vars2.haskey(n[0].value):
+                    if n[2].kind == TK_IDENTIFIER:
+                        Vars2[n[0].value] = Variable(vname: Vars2[n[2].value].vname, ty: Vars2[n[2].value].ty)
+                    else:
+                        Vars2[n[0].value] = Variable(vname: n[2].value, ty: n[2].kind)
+                
+                else:
+                    er(n[0], "Not a declared variable. Declare it with ' var (variable name) = (value); '")
 
             elif Fun.haskey(n[0].value):
                 for ab in actiontree2(Fun[n[0].value]):
