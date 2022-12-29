@@ -2,14 +2,15 @@
 fn main {
     echo "Hello world";
     record "Test" -> "Hello world";
-    echo fetch("Test");
 
-    if fetch("Test") == "Hello world" {
-        echo "test";
+    fetch "Test" -> x;
+
+    if x == "Hello world" {
+        echo "This works!";
     }
 
-    var x = "test";
-    garbage(x);
+    x = "test";
+    garbage x;
 
     test();
 
