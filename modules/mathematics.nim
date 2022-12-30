@@ -33,4 +33,4 @@ proc math*(n: seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) =
         elif x.kind == TK_MATH:
             inc(track)
 
-    return (evaluate(expression).int, i)sd
+    return (evaluate(expression), i)
