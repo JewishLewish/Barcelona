@@ -2,7 +2,7 @@ import ../main
 import tables
 
 {.compile: "math.c".}
-proc evaluate(a: cstring): int {.importc.}
+proc evaluate(a: string): int {.importc.}
 
 proc math*(n: seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) = 
     var expression:string = ""
@@ -33,4 +33,4 @@ proc math*(n: seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) =
         elif x.kind == TK_MATH:
             inc(track)
 
-    return (evaluate(expression).int, i)
+    return (evaluate(expression).int, i)sd
