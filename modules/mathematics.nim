@@ -3,8 +3,11 @@ import tables
 import mathexpr
 let e = newEvaluator()
 
+{.compile: "math.c".}
+proc evaluate(a: cstring): int {.importc.}
+
 proc math*(n: seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) = 
-    var expression = ""
+    var expression:string = ""
     var i = 0
     var c:int8 = 0
     var track = 0
@@ -31,5 +34,5 @@ proc math*(n: seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) =
 
         elif x.kind == TK_MATH:
             inc(track)
-    
+
     return (e.eval(expression).int, i)

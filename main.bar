@@ -1,3 +1,8 @@
+benchmark;
+
 var x = 0;
-x = 2;
-echo x;
+loop 1000000 {
+    x = $(x+1);
+}
+
+benchmark;
