@@ -1,7 +1,5 @@
 import ../main
 import tables
-import mathexpr
-let e = newEvaluator()
 
 {.compile: "math.c".}
 proc evaluate(a: cstring): int {.importc.}
@@ -35,4 +33,4 @@ proc math*(n: seq[TokenTuple], Vars2: Table[string, Variable]): (int, int) =
         elif x.kind == TK_MATH:
             inc(track)
 
-    return (e.eval(expression).int, i)
+    return (evaluate(expression).int, i)

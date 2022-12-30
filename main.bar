@@ -2,7 +2,7 @@ benchmark;
 
 var x = 0;
 loop 1000000 {
-    x = $(x+1);
+    inc x;
 }
 
 benchmark;
